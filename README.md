@@ -8,4 +8,4 @@ Contains firmware for mints Solar powered Arduino based LORa nodes
   
 - Power is set through +RFPOWER AT command 
 - Datasheet for the LoRaWAN chip : https://www.mouser.com/catalog/specsheets/Murata_CMWX1ZZABZ-078.pdf
-
+- Some context on the available functions
