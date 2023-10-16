@@ -45,7 +45,12 @@ uint32_t IPS7100Period   ;
 Adafruit_INA219 ina219Battery(0x40);
 Adafruit_INA219 ina219Solar(0x41);
 bool MLRPS001Online;
+powerStatus currentPowerStatus;
+
 // Initial Setup
+
+// powerStatus = 
+
 void setup() {
 
   // Initiating Serial Communications for debugging purposes
@@ -56,6 +61,11 @@ void setup() {
   Serial.print("========== MINTS SALOR  NODES ============");
   Serial.print("==========================================");
   
+  MLRPS001Online = initializeMLRPS001();
+  if (MLRPS001Online){
+     readMLRPS001(false);
+  }
+
   loraInitMints();
   resetLoRaMints(10,1);
 
@@ -64,7 +74,7 @@ void setup() {
   AS7265XOnline  = initializeAS7265X();
   RG15Online     = initializeRG15();
   IPS7100Online  = initializeIPS7100();
-  MLRPS001Online = initializeMLRPS001();
+
   // resetIPS7100(IPS7100ResetTime);  
 
 }

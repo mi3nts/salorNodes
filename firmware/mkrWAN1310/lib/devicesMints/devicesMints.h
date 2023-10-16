@@ -43,15 +43,26 @@ extern Adafruit_INA219 ina219Battery;
 extern Adafruit_INA219 ina219Solar;
 bool initializeMLRPS001();
 int readMLRPS001(bool initCheck);
-// uint8_t sizeIn = 7;
-// unsigned long valuesPC[7];
+extern powerStatus currentPowerStatus;
 
-// uint8_t sizeInBytesPC = sizeof(valuesPC);   
-// uint8_t sizeInBytesPM = sizeof(valuesPM);   
-// uint8_t sizeInBytes = sizeof(valuesPC) + sizeof(valuesPM);  
 
-// uint8_t getPowerMode(uint8_t powerPin);
-// uint32_t getPeriod(uint8_t getPowerMode, String sensorID);
+
+
+
+
+struct powerStatus
+ {
+  float batteryShuntVoltage;          
+  float batteryBusVoltage;   
+  float batteryCurrent;   
+  float batteryPower;   
+  float solarShuntVoltage;          
+  float solarBusVoltage;   
+  float solarCurrent;   
+  float solarPower;   
+  uint8_t powerMode;
+} ;
+
 
 
 #endif

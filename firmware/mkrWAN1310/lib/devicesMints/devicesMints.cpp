@@ -332,30 +332,41 @@ bool initializeMLRPS001(){
 
 int readMLRPS001(bool initCheck){
   Serial.println("MLRPS001 reader");
-  uint8_t sizeIn = 3;
-  uint8_t portIn = 33;
+  uint8_t sizeIn = 8;
+  uint8_t portIn = 103;
   String sensorName = "MLRPS001" ;
 
-  float internalBatteryVoltage = (analogRead(A0) / 4095.0) * 3.3*2;
+  float internalBatteryVoltage = (analogRead(A0) / 4095.0)*3.3*2;
+  Serial.println("Battery Voltage");
   Serial.println(internalBatteryVoltage);
-  // float values[sizeIn]  = {
-  //                     scd30.getCO2(),
-  //                     scd30.getTemperature(),
-  //                     scd30.getHumidity()
-  //                     };
-  //   uint8_t sizeInBytes = sizeof(values);                    
-  //   byte sendOut[sizeInBytes];
-  //   memcpy(sendOut,&values,sizeof(values));
-  //   sensorPrintFloats(sensorName,values,sizeIn);
-  //   Serial.println(" ");   
-  //   sensorPrintBytes(sensorName,sendOut,sizeInBytes);
-  //   Serial.println(" ");   
-  //   if (values[0] >  0 ){
-  //       return loRaSendMints(sendOut,sizeInBytes, portIn);
-  //   }else{
-  //     return -100;
-  //   }
-  return 1;
+  if (initCheck)
+  {
+    float values[sizeIn]  = {
+                        ina219Battery.getShuntVoltage_mV(),
+                        ina219Battery.getBusVoltage_V(),
+                        ina219Battery.getCurrent_mA(),
+                        ina219Battery.getPower_mW(),
+                        ina219Solar.getShuntVoltage_mV(),
+                        ina219Solar.getBusVoltage_V(),
+                        ina219Solar.getCurrent_mA(),
+                        ina219Solar.getPower_mW(),                      
+                        internalBatteryVoltage,
+                        };
+      uint8_t sizeInBytes = sizeof(values);                    
+      byte sendOut[sizeInBytes];
+      memcpy(sendOut,&values,sizeof(values));
+      sensorPrintFloats(sensorName,values,sizeIn);
+      Serial.println(" ");   
+      sensorPrintBytes(sensorName,sendOut,sizeInBytes);
+      Serial.println(" ");   
+      if (values[0] >  0 ){
+          return loRaSendMints(sendOut,sizeInBytes, portIn);
+      }else{
+        return -100;
+      }
+    return 1;
+  } else {
+    return -200;
   }
 
 
