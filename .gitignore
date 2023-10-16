@@ -1,3 +1,6 @@
+*.yaml
+*credentials.h
+
 # Prerequisites
 *.d
 
