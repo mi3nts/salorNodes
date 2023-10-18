@@ -30,6 +30,14 @@ byte sensorPrintBytes(String sensor,byte readings[],uint8_t numOfvals){
       Serial.print("~");
 }
 
+void sensorPrintDoubles(String sensor,double readings[],uint8_t numOfvals){
+  Serial.print("#mintsD!");Serial.print(sensor);Serial.print(">");
+  for (int i = 0; i < numOfvals; ++i)
+      {
+        Serial.print(String(readings[i]));Serial.print(":");
+      }
+      Serial.print("~");
+}
 
 
 void sensorPrintFloats(String sensor,float readings[],uint8_t numOfvals){
@@ -40,6 +48,25 @@ void sensorPrintFloats(String sensor,float readings[],uint8_t numOfvals){
       }
       Serial.print("~");
 }
+
+void sensorPrintUInt16s(String sensor,uint16_t readings[],uint8_t numOfvals){
+  Serial.print("#mintsUInt16!");Serial.print(sensor);Serial.print(">");
+  for (int i = 0; i < numOfvals; ++i)
+      {
+        Serial.print(String(readings[i]));Serial.print(":");
+      }
+      Serial.print("~");
+}
+
+void sensorPrintUInt8s(String sensor,uint8_t readings[],uint8_t numOfvals){
+  Serial.print("#mintsUInt8!");Serial.print(sensor);Serial.print(">");
+  for (int i = 0; i < numOfvals; ++i)
+      {
+        Serial.print(String(readings[i]));Serial.print(":");
+      }
+      Serial.print("~");
+}
+
 
 void sensorPrintULongs(String sensor,unsigned long readings[],uint8_t numOfvals){
   Serial.print("#mintsUL!");Serial.print(sensor);Serial.print(">");

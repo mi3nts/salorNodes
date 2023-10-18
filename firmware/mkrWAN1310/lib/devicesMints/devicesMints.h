@@ -10,13 +10,22 @@
 #include "Adafruit_INA219.h"
 #include "SparkFun_SCD30_Arduino_Library.h"
 #include "SparkFun_AS7265X.h"
+#include "Adafruit_GPS.h"
 
 
-// extern Adafruit_INA219 ina219Battery;
-// extern Adafruit_INA219 ina219Solar;
-// bool initializeINA219DuoMints();
-// void readINA219DuoMints();
-// void readINA219DuoMintsMax();
+
+struct powerStatus
+ {
+  float batteryShuntVoltage;          
+  float batteryBusVoltage;   
+  float batteryCurrent;   
+  float batteryPower;   
+  float solarShuntVoltage;          
+  float solarBusVoltage;   
+  float solarCurrent;   
+  float solarPower; 
+  float internalBatteryVoltage;   
+} ;
 
 extern IpsSensor ips7100;
 bool initializeIPS7100();
@@ -45,23 +54,10 @@ bool initializeMLRPS001();
 int readMLRPS001(bool initCheck);
 extern powerStatus currentPowerStatus;
 
-
-
-
-
-
-struct powerStatus
- {
-  float batteryShuntVoltage;          
-  float batteryBusVoltage;   
-  float batteryCurrent;   
-  float batteryPower;   
-  float solarShuntVoltage;          
-  float solarBusVoltage;   
-  float solarCurrent;   
-  float solarPower;   
-  uint8_t powerMode;
-} ;
+extern Adafruit_GPS pa1010d;
+bool initializePA1010D();
+int readPA1010D();
+#define GPSECHO false
 
 
 

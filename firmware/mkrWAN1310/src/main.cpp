@@ -47,6 +47,9 @@ Adafruit_INA219 ina219Solar(0x41);
 bool MLRPS001Online;
 powerStatus currentPowerStatus;
 
+Adafruit_GPS pa1010d(&Wire);
+bool PA1010DOnline;
+
 // Initial Setup
 
 // powerStatus = 
@@ -74,37 +77,40 @@ void setup() {
   AS7265XOnline  = initializeAS7265X();
   RG15Online     = initializeRG15();
   IPS7100Online  = initializeIPS7100();
-
+  PA1010DOnline  = initializePA1010D();
   // resetIPS7100(IPS7100ResetTime);  
 
 }
 
 void loop() {
   
-  Serial.println("Reading IPS7100");
-  readIPS7100();
-  delay(5000);
+  // Serial.println("Reading IPS7100");
+  // readIPS7100();
+  // delay(5000);
 
-  Serial.println("Reading BME280");
-  readBME280();
-  delay(5000);
+  // Serial.println("Reading BME280");
+  // readBME280();
+  // delay(5000);
 
-  Serial.println("Reading SCD30");
-  readSCD30();
-  delay(5000);
+  // Serial.println("Reading SCD30");
+  // readSCD30();
+  // delay(5000);
 
-  Serial.println("Reading AS7265X");
-  readAS7265X();
-  delay(5000);
+  // Serial.println("Reading AS7265X");
+  // readAS7265X();
+  // delay(5000);
 
-  Serial.println("Reading RG15");
-  readRG15()  ;
-  delay(5000);
+  // Serial.println("Reading RG15");
+  // readRG15()  ;
+  // delay(5000);
+  
+  // Serial.println("Reading MLRPS001");
+  // readMLRPS001(true)  ;
+  // delay(5000);
 
-  Serial.println("Reading MLRPS001");
-  readMLRPS001(true)  ;
-  delay(5000);
-
+  Serial.println("Reading PA1010D");
+  readPA1010D()  ;
+  delay(1000);
 
 }
 
