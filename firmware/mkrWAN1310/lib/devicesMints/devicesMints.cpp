@@ -131,8 +131,16 @@ int readBME280()
 // SCD30 ---------------------------------------
 bool initializeSCD30(){
   if (scd30.begin()) {
+    
     delay(10);
-    scd30.setMeasurementInterval(10);
+    scd30.reset();
+    delay(10);
+    Serial.println(scd30.setMeasurementInterval(30));
+    delay(10);
+    Serial.println(scd30.setAutoSelfCalibration(true));
+    delay(10);
+    Serial.println(scd30.beginMeasuring());
+
     delay(1);
     Serial.println("SCD30 Initiated");
     return true;
@@ -148,26 +156,42 @@ int readSCD30(){
   uint8_t sizeIn = 3;
   uint8_t portIn = 33;
   String sensorName = "SCD30" ;
-  float values[sizeIn]  = {
-                      float(scd30.getCO2()),
-                      scd30.getTemperature(),
-                      scd30.getHumidity()
-                      };
+  // scd30.readMeasurement();
+  // delay(10);
+  unsigned long startTime = millis(); // Record the start time
+
+  unsigned long duration = 3000; // 3 seconds
+
+  while (millis() - startTime < duration)
+  {
+    if (scd30.dataAvailable())
+    {
+      float values[sizeIn]  = {
+                          float(scd30.getCO2()),
+                          scd30.getTemperature(),
+                          scd30.getHumidity()
+                          };
 
 
-    uint8_t sizeInBytes = sizeof(values);                    
-    byte sendOut[sizeInBytes];
-    memcpy(sendOut,&values,sizeof(values));
-    sensorPrintFloats(sensorName,values,sizeIn);
-    Serial.println(" ");   
-    sensorPrintBytes(sensorName,sendOut,sizeInBytes);
-    Serial.println(" ");   
-    if (values[0] >  0 ){
-        return loRaSendMints(sendOut,sizeInBytes, portIn);
-    }else{
-      return -100;
+      uint8_t sizeInBytes = sizeof(values);                    
+      byte sendOut[sizeInBytes];
+      memcpy(sendOut,&values,sizeof(values));
+      sensorPrintFloats(sensorName,values,sizeIn);
+      Serial.println(" ");   
+      sensorPrintBytes(sensorName,sendOut,sizeInBytes);
+      Serial.println(" ");   
+      if (values[0] >  0 )
+      {
+            return loRaSendMints(sendOut,sizeInBytes, portIn);
+      }
     }
+        delay(100);
   }
+  Serial.println("SCD30 Data invalid"); 
+  return -100;
+}
+
+
 
 // SCD30 ---------------------------------------
 bool initializeAS7265X(){
@@ -193,6 +217,7 @@ int readAS7265X(){
   uint8_t sizeIn = 18;
   uint8_t portIn = 51;
   String sensorName = "AS7265X" ;
+  as7265x.takeMeasurements();
   float values[sizeIn]  = {
                       as7265x.getCalibratedA(),
                       as7265x.getCalibratedB(),
@@ -211,7 +236,7 @@ int readAS7265X(){
                       as7265x.getCalibratedV(),
                       as7265x.getCalibratedW(),
                       as7265x.getCalibratedK(),
-                      as7265x.getCalibratedL()
+                      as7265x.getCalibratedL(),
                       };
 
 
@@ -222,13 +247,68 @@ int readAS7265X(){
     Serial.println(" ");   
     sensorPrintBytes(sensorName,sendOut,sizeInBytes);
     Serial.println(" ");   
-    if (values[0] >  0 ){
-        return loRaSendMints(sendOut,sizeInBytes, portIn);
-    }else{
-      return -100;
-    }
+    return loRaSendMints(sendOut,sizeInBytes, portIn);
   }
 
+int readAS7265X1(){
+  Serial.println("AS7265X1 reader");
+  uint8_t sizeIn = 9;
+  uint8_t portIn = 52;
+  String sensorName = "AS7265X1" ;
+  as7265x.takeMeasurements();
+  float values[sizeIn]  = {
+                      as7265x.getCalibratedA(),
+                      as7265x.getCalibratedB(),
+                      as7265x.getCalibratedC(),
+                      as7265x.getCalibratedD(),
+                      as7265x.getCalibratedE(),
+                      as7265x.getCalibratedF(),
+                      as7265x.getCalibratedG(),
+                      as7265x.getCalibratedH(),
+                      as7265x.getCalibratedR(),
+                      };
+
+
+    uint8_t sizeInBytes = sizeof(values);                    
+    byte sendOut[sizeInBytes];
+    memcpy(sendOut,&values,sizeof(values));
+    sensorPrintFloats(sensorName,values,sizeIn);
+    Serial.println(" ");   
+    sensorPrintBytes(sensorName,sendOut,sizeInBytes);
+    Serial.println(" ");   
+    return loRaSendMints(sendOut,sizeInBytes, portIn);
+  }
+
+
+
+int readAS7265X2(){
+  Serial.println("AS7265X2 reader");
+  uint8_t sizeIn = 9;
+  uint8_t portIn = 53;
+  String sensorName = "AS7265X2" ;
+  as7265x.takeMeasurements();
+  float values[sizeIn]  = {
+                      as7265x.getCalibratedI(),
+                      as7265x.getCalibratedS(),
+                      as7265x.getCalibratedJ(),
+                      as7265x.getCalibratedT(),
+                      as7265x.getCalibratedU(),
+                      as7265x.getCalibratedV(),
+                      as7265x.getCalibratedW(),
+                      as7265x.getCalibratedK(),
+                      as7265x.getCalibratedL(),
+                      };
+
+
+    uint8_t sizeInBytes = sizeof(values);                    
+    byte sendOut[sizeInBytes];
+    memcpy(sendOut,&values,sizeof(values));
+    sensorPrintFloats(sensorName,values,sizeIn);
+    Serial.println(" ");   
+    sensorPrintBytes(sensorName,sendOut,sizeInBytes);
+    Serial.println(" ");   
+    return loRaSendMints(sendOut,sizeInBytes, portIn);
+  }
 
 
 //  Serial.println(Serial1.readString());
@@ -332,7 +412,7 @@ bool initializeMLRPS001(){
 
 int readMLRPS001(bool initCheck){
   Serial.println("MLRPS001 reader");
-  uint8_t sizeIn = 8;
+  uint8_t sizeIn = 9;
   uint8_t portIn = 103;
   String sensorName = "MLRPS001" ;
 
@@ -371,11 +451,8 @@ int readMLRPS001(bool initCheck){
       Serial.println(" ");   
       sensorPrintBytes(sensorName,sendOut,sizeInBytes);
       Serial.println(" ");   
-      if (values[0] > 0){
-          return loRaSendMints(sendOut,sizeInBytes, portIn);
-          }else{
-            return -100;
-      }
+      return loRaSendMints(sendOut,sizeInBytes, portIn);
+
     return 1;
     }
     else {
@@ -386,18 +463,33 @@ int readMLRPS001(bool initCheck){
 
 
 bool initializePA1010D(){
+  Serial.print("PA1010D initiating");
+  delay(10);
   bool gpsStatus = pa1010d.begin(0x10);  // The I2C address to use is 0x10
   if (gpsStatus) {
-      pa1010d.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGAGSA);
-      pa1010d.sendCommand(PMTK_SET_NMEA_UPDATE_10HZ); // 10 Hz update rate
-      pa1010d.sendCommand(PGCMD_NOANTENNA);
-      delay(1000);
-      // pa1010d.println(PMTK_Q_RELEASE);
+      delay(10);
+      pa1010d.sendCommand(PMTK_SET_NMEA_UPDATE_5HZ); // 10 Hz update rate
+      delay(10);
+      pa1010d.sendCommand(PMTK_SET_BAUD_57600); // 10 Hz update rate
+      delay(10);
+      pa1010d.sendCommand(PMTK_SET_NMEA_OUTPUT_ALLDATA);
+      delay(10);
+      pa1010d.sendCommand("$PMTK320,0*26");
+      delay(10);
+      pa1010d.sendCommand("$PMTK225,0*2B");
+      delay(10);
+      pa1010d.sendCommand(PMTK_Q_RELEASE);
+      delay(10);
+      pa1010d.sendCommand(PMTK_ENABLE_SBAS);
+      Serial.print("PA1010D initiated");
   }
+
+
   return gpsStatus;
 }
 
-int readPA1010D(){
+int readPA1010D()
+  {
   // Serial.println("PA1010D reader");
   uint8_t sizeInDouble  = 2;
   uint8_t sizeInFloat   = 3;
@@ -405,40 +497,41 @@ int readPA1010D(){
   uint8_t sizeInUint8   = 8;
   uint8_t portIn = 105;
   String sensorName = "PA1010D" ;
-  
+
   unsigned long startTime = millis(); // Record the start time
 
-// Define the duration in milliseconds for which you want the loop to run
-  unsigned long duration = 30000; // 5 seconds
-
-  while (millis() - startTime < duration) {
-    char c = pa1010d.read();
-
-    if (pa1010d.newNMEAreceived()) {
-      Serial.println(pa1010d.lastNMEA()); // this also sets the newNMEAreceived() flag to false
-    if (!pa1010d.parse(pa1010d.lastNMEA())) {// this also sets the newNMEAreceived() flag to false
-      continue;
-    }
-      if (pa1010d.secondsSinceFix()<.10){
-
-          String sensorName = "PA1010D" ;
-
-              double valuesDouble[sizeInDouble]  = {
+  unsigned long duration = 3000; // 3 seconds
+  // pa1010d.sendCommand();
+  while (millis() - startTime < duration) 
+  {
+    pa1010d.read();
+    if (pa1010d.newNMEAreceived()) 
+    {
+      Serial.println(pa1010d.lastNMEA());
+      if (!pa1010d.parse(pa1010d.lastNMEA())) 
+      {
+        //  Serial.println("No Fix found"); 
+        continue;
+      }
+      if (pa1010d.secondsSinceFix()<.10)
+      {
+        String sensorName = "PA1010D" ;
+        double valuesDouble[sizeInDouble]  = {
                             pa1010d.latitudeDegrees,
                             pa1010d.longitudeDegrees
-              };// 42 bytes 
+              };
 
-              float valuesFloat[sizeInFloat]  = {
+        float valuesFloat[sizeInFloat]  = {
                             pa1010d.altitude,
                             pa1010d.speed,
                             pa1010d.magvariation,           
-              };// 42 bytes 
+              };
 
-              uint16_t valuesUint16[sizeInUint16]  = {
+        uint16_t valuesUint16[sizeInUint16]  = {
                          pa1010d.year + 2000,
               };
 
-              uint8_t valuesUint8[sizeInUint8]  = {
+        uint8_t valuesUint8[sizeInUint8]  = {
                               pa1010d.month,
                               pa1010d.day,
                               pa1010d.hour,
@@ -447,47 +540,43 @@ int readPA1010D(){
                               pa1010d.satellites,  
                               pa1010d.fixquality,
                               pa1010d.fixquality_3d,
-                             };  
+              };  
 
-            uint8_t sizeInBytesDouble = sizeof(valuesDouble);  
-            uint8_t sizeInBytesFloat  = sizeof(valuesFloat);          
-            uint8_t sizeInBytesUint16 = sizeof(valuesUint16);   
-            uint8_t sizeInBytesUint8  = sizeof(valuesUint8);
+        uint8_t sizeInBytesDouble = sizeof(valuesDouble);  
+        uint8_t sizeInBytesFloat  = sizeof(valuesFloat);          
+        uint8_t sizeInBytesUint16 = sizeof(valuesUint16);   
+        uint8_t sizeInBytesUint8  = sizeof(valuesUint8);
             
-            uint8_t sizeInBytes       =  sizeInBytesDouble + sizeInBytesFloat + sizeInBytesUint16+ sizeInBytesUint8;
+        uint8_t sizeInBytes       =  sizeInBytesDouble + sizeInBytesFloat + sizeInBytesUint16+ sizeInBytesUint8;
 
-            byte sendOutDouble[sizeInBytesDouble];
-            byte sendOutFloat[sizeInBytesFloat];        
-            byte sendOutUint16[sizeInBytesUint16];
-            byte sendOutUint8[sizeInBytesUint8];
+        byte sendOutDouble[sizeInBytesDouble];
+        byte sendOutFloat[sizeInBytesFloat];        
+        byte sendOutUint16[sizeInBytesUint16];
+        byte sendOutUint8[sizeInBytesUint8];
             
-            byte sendOut[sizeInBytes];
+        byte sendOut[sizeInBytes];
 
-            memcpy(sendOutDouble,&valuesDouble,sizeof(valuesDouble));
-            memcpy(sendOutFloat,&valuesFloat,sizeof(valuesFloat));            
-            memcpy(sendOutUint16,&valuesUint16,sizeof(valuesUint16));
-            memcpy(sendOutUint8,&valuesUint8,sizeof(valuesUint8));
+        memcpy(sendOutDouble,&valuesDouble,sizeof(valuesDouble));
+        memcpy(sendOutFloat,&valuesFloat,sizeof(valuesFloat));            
+        memcpy(sendOutUint16,&valuesUint16,sizeof(valuesUint16));
+        memcpy(sendOutUint8,&valuesUint8,sizeof(valuesUint8));
 
-            memcpy(sendOut, &sendOutDouble, sizeof(valuesDouble));
-            memcpy(sendOut + sizeInBytesDouble, &sendOutFloat, sizeof(valuesFloat));
-            memcpy(sendOut + sizeInBytesDouble + sizeInBytesFloat, &sendOutUint16, sizeof(valuesUint16));            
-            memcpy(sendOut + sizeInBytesDouble + sizeInBytesFloat + sizeInBytesUint16, &sendOutUint8 ,sizeof(valuesUint8));
+        memcpy(sendOut, &sendOutDouble, sizeof(valuesDouble));
+        memcpy(sendOut + sizeInBytesDouble, &sendOutFloat, sizeof(valuesFloat));
+        memcpy(sendOut + sizeInBytesDouble + sizeInBytesFloat, &sendOutUint16, sizeof(valuesUint16));            
+        memcpy(sendOut + sizeInBytesDouble + sizeInBytesFloat + sizeInBytesUint16, &sendOutUint8 ,sizeof(valuesUint8));
             
-            sensorPrintDoubles(sensorName,valuesDouble,sizeInDouble);
-            sensorPrintFloats(sensorName,valuesFloat,sizeInFloat);
-            sensorPrintUInt16s(sensorName,valuesUint16,sizeInUint16);
-            sensorPrintUInt8s(sensorName,valuesUint8,sizeInUint8);
+        sensorPrintDoubles(sensorName,valuesDouble,sizeInDouble);
+        sensorPrintFloats(sensorName,valuesFloat,sizeInFloat);
+        sensorPrintUInt16s(sensorName,valuesUint16,sizeInUint16);
+        sensorPrintUInt8s(sensorName,valuesUint8,sizeInUint8);
 
-            sensorPrintBytes(sensorName,sendOut,sizeInBytes);
-            
-            delay(5000);
-            return loRaSendMints(sendOut,sizeInBytes, portIn);
+        sensorPrintBytes(sensorName,sendOut,sizeInBytes);
+        return loRaSendMints(sendOut,sizeInBytes, portIn);
   
-        // return 100;
-        }
       }
     }
-
+  }
 
     return - 100;
     }

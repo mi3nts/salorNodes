@@ -44,6 +44,8 @@ int readSCD30();
 extern AS7265X as7265x;
 bool initializeAS7265X();
 int readAS7265X();
+int readAS7265X1();
+int readAS7265X2();
 
 bool initializeRG15();
 int readRG15();
