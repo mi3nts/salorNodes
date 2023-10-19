@@ -85,7 +85,11 @@ def encodeDecode(sensorID,sensorData,transmitReceive):
     if sensorID == "SCD30":
         return sensingSCD30(sensorData,transmitReceive);           
     if sensorID == "AS7265X":
-        return sensingAS7265X(sensorData,transmitReceive);   
+        return sensingAS7265X(sensorData,transmitReceive); 
+    if sensorID == "AS7265X1":
+        return sensingAS7265X1(sensorData,transmitReceive); 
+    if sensorID == "AS7265X2":
+        return sensingAS7265X2(sensorData,transmitReceive); 
     if sensorID == "PM":
         return sensingPM(sensorData,transmitReceive);   
     if sensorID == "PMPoLo":
@@ -102,8 +106,63 @@ def encodeDecode(sensorID,sensorData,transmitReceive):
         return sensingMBCLR002(sensorData,transmitReceive);  
     if sensorID == "RG15":
         return sensingRG15(sensorData,transmitReceive);  
-
+    if sensorID == "MLRPS001":
+        return sensingMLRPS001(sensorData,transmitReceive);  
     return;   
+
+
+
+def sensingMLRPS001(dataIn,transmitReceive):
+    try:
+        if (transmitReceive): 
+            print("MLRPS001 Read")	
+            if (len(dataIn)==5):
+                strOut  = \
+                    np.float32(dataIn[0]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[1]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[2]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[3]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[4]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[5]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[6]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[7]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[8]).tobytes().hex().zfill(8) 
+                return strOut;  
+            else:
+                print("Invalid data string read from the MLRPS001")
+
+                return None;
+
+        else:
+            dateTime = datetime.datetime.now()
+            sensorDictionary =  OrderedDict([
+                    ("dateTime"               ,str(dateTime)),
+                    ("batteryShuntVoltage"    ,struct.unpack('<f',bytes.fromhex(dataIn[0:8]))[0]),
+                    ("batteryBusVoltage"      ,struct.unpack('<f',bytes.fromhex(dataIn[8:16]))[0]),
+                    ("batteryCurrent"         ,struct.unpack('<f',bytes.fromhex(dataIn[16:24]))[0]),
+                    ("batteryPower"           ,struct.unpack('<f',bytes.fromhex(dataIn[24:32]))[0]),
+                    ("solarShuntVoltage"      ,struct.unpack('<f',bytes.fromhex(dataIn[32:40]))[0]),        
+                    ("solarBusVoltage"        ,struct.unpack('<f',bytes.fromhex(dataIn[40:48]))[0]),
+                    ("solarCurrent"           ,struct.unpack('<f',bytes.fromhex(dataIn[48:56]))[0]),
+                    ("solarPower"             ,struct.unpack('<f',bytes.fromhex(dataIn[56:64]))[0]),
+                    ("internalBatteryVoltage" ,struct.unpack('<f',bytes.fromhex(dataIn[64:72]))[0]),    
+            ])
+            return sensorDictionary;
+
+    except Exception as e:
+        time.sleep(.5)
+        print ("Error and type: %s - %s." % (e,type(e)))
+        time.sleep(.5)
+        print("Data Packet Not Sent for SCD30")
+        time.sleep(.5)
+        return None
+
+
+
+
+
+
+
 
 def sensingBME280V2(dataIn,transmitReceive):
     try:
@@ -497,6 +556,91 @@ def sensingGPRMCPL(dataIn,transmitReceive):
         print ("Error and type: %s - %s." % (e,type(e)))
         time.sleep(.5)
         print("Data Packet Not Sent for GPRMCPL")
+        time.sleep(.5)
+        return None
+    
+def sensingAS7265X1(dataIn,transmitReceive):
+    try:
+        if (transmitReceive): 
+            print("AS7265X1 Read")	
+            if(len(dataIn)==18):
+                strOut  = \
+                    np.float32(dataIn[0]).tobytes().hex().zfill(8)+ \
+                    np.float32(dataIn[1]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[2]).tobytes().hex().zfill(8)+ \
+                    np.float32(dataIn[3]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[4]).tobytes().hex().zfill(8)+ \
+                    np.float32(dataIn[5]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[6]).tobytes().hex().zfill(8)+ \
+                    np.float32(dataIn[7]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[8]).tobytes().hex().zfill(8)
+                return strOut;  
+            else:
+                print("Invalid data string read by the Canaaree")
+                return None;
+        else:
+            dateTime = datetime.datetime.now()
+            sensorDictionary =  OrderedDict([
+                    ("dateTime"      ,str(dateTime)),
+                    ("channelA410nm" ,struct.unpack('<f',bytes.fromhex(dataIn[0:8]))[0]),
+                    ("channelB435nm" ,struct.unpack('<f',bytes.fromhex(dataIn[8:16]))[0]),
+                    ("channelC460nm" ,struct.unpack('<f',bytes.fromhex(dataIn[16:24]))[0]),
+                    ("channelD485nm" ,struct.unpack('<f',bytes.fromhex(dataIn[24:32]))[0]),                
+                    ("channelE510nm" ,struct.unpack('<f',bytes.fromhex(dataIn[32:40]))[0]),
+                    ("channelF535nm" ,struct.unpack('<f',bytes.fromhex(dataIn[40:48]))[0]),
+                    ("channelG560nm" ,struct.unpack('<f',bytes.fromhex(dataIn[48:56]))[0]),
+                    ("channelH585nm" ,struct.unpack('<f',bytes.fromhex(dataIn[56:64]))[0]),                
+                    ("channelR610nm" ,struct.unpack('<f',bytes.fromhex(dataIn[64:72]))[0]),
+])
+            return sensorDictionary;
+    except Exception as e:
+        time.sleep(.5)
+        print ("Error and type: %s - %s." % (e,type(e)))
+        time.sleep(.5)
+        print("Data Packet Not Sent for AS7265X")
+        time.sleep(.5)
+        return None
+    
+
+def sensingAS7265X2(dataIn,transmitReceive):
+    try:
+        if (transmitReceive): 
+            print("AS7265X2 Read")	
+            if(len(dataIn)==9):
+                strOut  = \
+                    np.float32(dataIn[0]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[1]).tobytes().hex().zfill(8)+ \
+                    np.float32(dataIn[2]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[3]).tobytes().hex().zfill(8)+ \
+                    np.float32(dataIn[4]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[5]).tobytes().hex().zfill(8)+ \
+                    np.float32(dataIn[6]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[7]).tobytes().hex().zfill(8)+ \
+                    np.float32(dataIn[8]).tobytes().hex().zfill(8) ;
+                return strOut;  
+            else:
+                print("Invalid data string read by the Canaaree")
+                return None;
+        else:
+            dateTime = datetime.datetime.now()
+            sensorDictionary =  OrderedDict([
+                    ("dateTime"      ,str(dateTime)),
+                    ("channelI645nm" ,struct.unpack('<f',bytes.fromhex(dataIn[0:8]))[0]),
+                    ("channelS680nm" ,struct.unpack('<f',bytes.fromhex(dataIn[8:16]))[0]),
+                    ("channelJ705nm" ,struct.unpack('<f',bytes.fromhex(dataIn[16:24]))[0]),                
+                    ("channelT730nm" ,struct.unpack('<f',bytes.fromhex(dataIn[24:32]))[0]),
+                    ("channelU760nm" ,struct.unpack('<f',bytes.fromhex(dataIn[32:40]))[0]),
+                    ("channelV810nm" ,struct.unpack('<f',bytes.fromhex(dataIn[40:48]))[0]),
+                    ("channelW860nm" ,struct.unpack('<f',bytes.fromhex(dataIn[48:56]))[0]),                
+                    ("channelK900nm" ,struct.unpack('<f',bytes.fromhex(dataIn[56:64]))[0]),
+                    ("channelL940nm" ,struct.unpack('<f',bytes.fromhex(dataIn[64:72]))[0]),
+            ])
+            return sensorDictionary;
+    except Exception as e:
+        time.sleep(.5)
+        print ("Error and type: %s - %s." % (e,type(e)))
+        time.sleep(.5)
+        print("Data Packet Not Sent for AS7265X2")
         time.sleep(.5)
         return None
 
