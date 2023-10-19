@@ -108,8 +108,91 @@ def encodeDecode(sensorID,sensorData,transmitReceive):
         return sensingRG15(sensorData,transmitReceive);  
     if sensorID == "MLRPS001":
         return sensingMLRPS001(sensorData,transmitReceive);  
+    if sensorID == "PA1010D":
+        return sensingPA1010D(sensorData,transmitReceive);  
     return;   
 
+                #  ("dateTime"            ,str(dateTime)),
+                #     ("hour"                ,struct.unpack('<B',bytes.fromhex(dataIn[0:2]))[0]),
+                #     ("minute"              ,struct.unpack('<B',bytes.fromhex(dataIn[2:4]))[0]),
+                #     ("second"              ,struct.unpack('<B',bytes.fromhex(dataIn[4:6]))[0]),
+                #     ("latitudeCoordinate"  ,struct.unpack('<d',bytes.fromhex(dataIn[6:22]))[0]),
+                #     ("longitudeCoordinate" ,struct.unpack('<d',bytes.fromhex(dataIn[22:38]))[0]),
+                #     ("gpsQuality"          ,struct.unpack('<B',bytes.fromhex(dataIn[38:40]))[0]),
+                #     ("numberOfSatellites"  ,struct.unpack('<B',bytes.fromhex(dataIn[40:42]))[0]),
+                #     ("HorizontalDilution"  ,struct.unpack('<f',bytes.fromhex(dataIn[42:50]))[0]),
+                #     ("altitude"            ,struct.unpack('<f',bytes.fromhex(dataIn[50:58]))[0]),
+                #     ("undulation
+
+#np.ubyte(timeStamp[0]).tobytes().hex().zfill(2)+ \
+                    # np.ubyte(timeStamp[1]).tobytes().hex().zfill(2)+ \
+                    # np.ubyte(timeStamp[2]).tobytes().hex().zfill(2)+ \
+                    # np.double(getLatitudeCords(dataIn.lat,dataIn.lat_dir)).tobytes().hex().zfill(16)+ \
+                    # np.double(getLongitudeCords(dataIn.lon,dataIn.lon_dir)).tobytes().hex().zfill(16) + \
+                    # np.ubyte(dataIn.gps_qual).tobytes().hex().zfill(2)+ \
+                    # np.ubyte(dataIn.num_sats).tobytes().hex().zfill(2)+ \
+                    # np.float32(dataIn.horizontal_dil).tobytes().hex().zfill(8) +\
+                    # np.float32(dataIn.altitude).tobytes().hex().zfill(8) +\
+                    # np.float32(dataIn.geo_s
+
+def sensingPA1010D(dataIn,transmitReceive):
+    try:
+        if (transmitReceive): 
+            print("PA1010D Read")	
+            if (len(dataIn)==15):
+                strOut  = \
+                    np.double(dataIn[0]).tobytes().hex().zfill(16) + \
+                    np.double(dataIn[1]).tobytes().hex().zfill(16) + \
+                    np.float32(dataIn[2]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[3]).tobytes().hex().zfill(8) + \
+                    np.float32(dataIn[4]).tobytes().hex().zfill(8) + \
+                    np.uint16(dataIn[5]).tobytes().hex().zfill(4) + \
+                    np.ubyte(dataIn[6]).tobytes().hex().zfill(2) + \
+                    np.ubyte(dataIn[7]).tobytes().hex().zfill(2) + \
+                    np.ubyte(dataIn[8]).tobytes().hex().zfill(2) + \
+                    np.ubyte(dataIn[9]).tobytes().hex().zfill(2) + \
+                    np.ubyte(dataIn[10]).tobytes().hex().zfill(2) + \
+                    np.ubyte(dataIn[11]).tobytes().hex().zfill(2) + \
+                    np.ubyte(dataIn[12]).tobytes().hex().zfill(2) + \
+                    np.ubyte(dataIn[13]).tobytes().hex().zfill(2) 
+
+                return strOut;  
+            else:
+                print("Invalid data string read from the MLRPS001")
+
+                return None;
+
+        else:
+            print("HERE")
+            print(dataIn)
+            dateTime = datetime.datetime.now()
+            sensorDictionary =  OrderedDict([
+                    ("dateTime"               ,str(dateTime)),
+                    ("latitudeCoordinate"     ,struct.unpack('<d',bytes.fromhex(dataIn[0:16]))[0]),
+                    ("longitudeCoordinate"    ,struct.unpack('<d',bytes.fromhex(dataIn[16:32]))[0]),
+                    ("altitude"               ,struct.unpack('<f',bytes.fromhex(dataIn[32:40]))[0]),
+                    ("speed"                  ,struct.unpack('<f',bytes.fromhex(dataIn[40:48]))[0]),
+                    ("magVariation"           ,struct.unpack('<f',bytes.fromhex(dataIn[48:56]))[0]),        
+                    ("year"                   ,struct.unpack('<H',bytes.fromhex(dataIn[56:60]))[0]),
+                    ("month"                  ,struct.unpack('<B',bytes.fromhex(dataIn[60:62]))[0]),
+                    ("day"                    ,struct.unpack('<B',bytes.fromhex(dataIn[62:64]))[0]),
+                    ("hour"                   ,struct.unpack('<B',bytes.fromhex(dataIn[64:66]))[0]),
+                    ("minute"                 ,struct.unpack('<B',bytes.fromhex(dataIn[66:68]))[0]),
+                    ("second"                 ,struct.unpack('<B',bytes.fromhex(dataIn[68:70]))[0]),
+                    ("satellites"             ,struct.unpack('<B',bytes.fromhex(dataIn[70:72]))[0]),
+                    ("fixQuality"              ,struct.unpack('<B',bytes.fromhex(dataIn[72:74]))[0]),
+                    ("fixQuality3D"            ,struct.unpack('<B',bytes.fromhex(dataIn[74:76]))[0]),
+
+            ])
+            return sensorDictionary;
+
+    except Exception as e:
+        time.sleep(.5)
+        print ("Error and type: %s - %s." % (e,type(e)))
+        time.sleep(.5)
+        print("Data Packet Not Sent for PAD1010D")
+        time.sleep(.5)
+        return None
 
 
 def sensingMLRPS001(dataIn,transmitReceive):
