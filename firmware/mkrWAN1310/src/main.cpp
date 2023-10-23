@@ -80,7 +80,7 @@ void setup() {
   RG15Online     = initializeRG15();
   IPS7100Online  = initializeIPS7100();
   PA1010DOnline  = initializePA1010D();
-  // resetIPS7100(IPS7100ResetTime);  
+  resetIPS7100(IPS7100ResetTime);  
 
 }
 
