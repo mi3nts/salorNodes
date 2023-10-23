@@ -88,7 +88,7 @@ void loop() {
   
   Serial.println("Reading IPS7100");
   readIPS7100();
-  delay(10000);
+  delay(5000);
 
   Serial.println("Reading BME280");
   readBME280();
