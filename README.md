@@ -174,4 +174,4 @@ void lowBatteryWarning(){
 }
   ```
  
-
+Not sure if this appracj will allow watchdog timers
