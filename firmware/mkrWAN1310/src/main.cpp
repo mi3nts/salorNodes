@@ -23,10 +23,6 @@
 #include "jobsMints.h"
 #include "devicesMints.h"
 #include "loRaMints.h"
-// #include "credentials.h"
-
-#include <Adafruit_SleepyDog.h>
-
 
 unsigned long sensingPeriod = SENSING_PERIOD  ;
 
@@ -58,11 +54,10 @@ powerStatus currentPowerStatus;
 
 Adafruit_GPS pa1010d(&Wire);
 bool PA1010DOnline;
+
 // Initial Setup
-unsigned long startTimeMillis ;
 unsigned long resetTimeMillis =  18000000 + random(1000)*60;
-// unsigned long resetTimeMillis =  20;
-// powerStatus = 
+unsigned long startTimeMillis = millis();
 
 void setup() {
 
@@ -101,7 +96,7 @@ void setup() {
   Serial.println(" milliseconds!");
   Serial.println();
    
-  unsigned long startTimeMillis = millis();
+
   // Serial.println(BOARD_TYPE);
 }
 
@@ -109,15 +104,10 @@ void loop() {
   
   Serial.println("Reading IPS7100");
   readIPS7100();
-<<<<<<< HEAD
   Watchdog.reset();
   delay(sensingPeriod);
   Serial.println(millis());
-  
-=======
-  delay(5000);
 
->>>>>>> 3c164e21da4a784f20c8d78fd1586b63f23fefb2
   Serial.println("Reading BME280");
   readBME280();
   Watchdog.reset();

@@ -61,6 +61,9 @@ int loRaSendMints(byte sendOut[], uint8_t numOfBytes, uint8_t portNum){
     err = modem.endPacket(false);
     SerialUSB.println("Error Code:");
     SerialUSB.println(err);
+    Watchdog.reset();
+    delay(5000);
+    Watchdog.reset();
     return err;
 }
 

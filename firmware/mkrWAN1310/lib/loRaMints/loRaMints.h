@@ -4,6 +4,8 @@
 #include <Arduino.h>
 #include "credentials.h"
 #include <MKRWAN.h>
+#include <Adafruit_SleepyDog.h>
+
 
 extern LoRaModem modem;
 
