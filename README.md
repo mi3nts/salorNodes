@@ -26,3 +26,152 @@ One last question, is the order to configure the PaSelect Variable and MaxPower 
 
 
 - ST LoRaWAN AT Command set: https://www.st.com/resource/en/application_note/an4967-examples-of-at-commands-on-icubelrwan-stmicroelectronics.pdf
+
+# Power Saving Stratergies 
+- To measure the current get the voltage drop accross the shunt resistor of the INA219 using an osciloscope during a data send operation ( "R100±1%" to indicate that the resistor's actual resistance can deviate by no more than 1% from the nominal value of 100 ohms.)
+
+
+## Things to do 
+
+- Set all ADC into inputs
+ ```
+// Set digital pins to input  to save on current drain
+ for (int i=0; i < 15; i++) 
+ {
+   pinMode(i, INPUT_PULLUP);
+ }
+```
+- Usefule Examples
+  - https://forum.arduino.cc/t/how-can-i-achieve-the-104-a-power-consumption/619331   
+
+```
+#include "ArduinoLowPower.h"
+
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(500);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(500);
+  LowPower.deepSleep(2000);
+}
+```
+ - https://docs.arduino.cc/learn/electronics/low-power
+
+```
+// Low Power Library
+#include "ArduinoLowPower.h"
+
+// LoRa Library
+#include <SPI.h>
+#include <LoRa.h>
+
+// LoRa Packet Content 
+char* message = "Hello LoRa!";
+
+void setup() {
+  Serial.begin(9600);
+  while (!Serial);
+
+  // LoRa Setup
+  Serial.println(F("LoRa Sender"));
+  if (!LoRa.begin(868E6)) {
+    Serial.println(F("Starting LoRa failed!"));
+    while (1);
+  } else {
+    Serial.println(F("Starting LoRa Successful!"));
+  }
+}
+
+void loop() {
+  LoRa_Packet_Sender();
+  GoToSleep();
+}
+
+// LoRa Task
+void LoRa_Packet_Sender() {
+  Serial.print(F("Sending packet: "));
+  Serial.println(message);
+
+  // send packet
+  LoRa.beginPacket();
+  LoRa.print(message);
+  LoRa.endPacket();
+
+  // Putting LoRa Module to Sleep 
+  Serial.println(F("LoRa Going in Sleep"));
+  LoRa.sleep();
+}
+
+// Sleep Task 
+void GoToSleep(){
+  Serial.println(F("MKR WAN 1310 - Going in Sleep"));
+  LowPower.deepSleep(20000);
+}
+```
+
+- Almost exactly what we need
+```
+  /*
+Low Power - Low Voltage Detection - SAMD21 Specific Configuration Example
+*/
+
+// Manual Power Management 
+#include "ArduinoLowPower.h"
+
+float voltValue, battery_volt, battery_percentage;
+float minimal_voltage = 1800;
+float battery_voltage_ref = 3.3;
+
+void setup() {
+  Serial.begin(57600);
+  delay(100);
+
+  // Low Power Indicator Set 
+  pinMode(LED_BUILTIN, OUTPUT);
+
+  // Default Analog Reference of 3.3V
+  analogReference(AR_DEFAULT);
+
+  // Setting up for resolution of 12-Bits
+  analogReadResolution(12);
+}
+
+void loop() { 
+  // Reading from the Battery Pin
+  voltValue = analogRead(A0);
+
+  // Calculate current voltage level
+  battery_volt = ((voltValue*battery_voltage_ref)/4095)*1000;
+  
+  // Battery level expressed in percentage
+  battery_percentage = 100*abs((battery_volt - minimal_voltage)/((battery_voltage_ref*1000) - minimal_voltage));
+
+  Serial.print(F("Battery: "));
+  Serial.print(battery_percentage);
+  Serial.println(F(" % "));
+  
+  if (battery_volt <= minimal_voltage){
+    //LED Notification for low voltage detection
+    lowBatteryWarning();
+  }
+
+  delay(2000);
+  
+  // Going into Low Power for 20 seconds 
+  LowPower.deepSleep(20000);
+}
+
+// Low battery indicator
+void lowBatteryWarning(){
+  digitalWrite(LED_BUILTIN, HIGH);  
+  delay (1);             
+  digitalWrite(LED_BUILTIN, LOW);    
+  delay (999);             
+}
+  ```
+ 
+Not sure if this appracj will allow watchdog timers
