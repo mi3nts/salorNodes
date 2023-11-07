@@ -26,3 +26,36 @@ One last question, is the order to configure the PaSelect Variable and MaxPower 
 
 
 - ST LoRaWAN AT Command set: https://www.st.com/resource/en/application_note/an4967-examples-of-at-commands-on-icubelrwan-stmicroelectronics.pdf
+
+# Power Saving Stratergies 
+- To measure the current get the voltage drop accross the shunt resistor of the INA219 using an osciloscope during a data send operation ( "R100±1%" to indicate that the resistor's actual resistance can deviate by no more than 1% from the nominal value of 100 ohms.)
+
+
+## Things to do 
+
+- Set all ADC into inputs
+ `
+// Set digital pins to input  to save on current drain
+ for (int i=0; i < 15; i++) 
+ {
+   pinMode(i, INPUT_PULLUP);
+ }
+`  
+- Usefule Examples
+  - https://forum.arduino.cc/t/how-can-i-achieve-the-104-a-power-consumption/619331   
+`
+#include "ArduinoLowPower.h"
+
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(500);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(500);
+  LowPower.deepSleep(2000);
+}
+`
+
