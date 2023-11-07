@@ -34,16 +34,17 @@ One last question, is the order to configure the PaSelect Variable and MaxPower 
 ## Things to do 
 
 - Set all ADC into inputs
- `
+ ```
 // Set digital pins to input  to save on current drain
  for (int i=0; i < 15; i++) 
  {
    pinMode(i, INPUT_PULLUP);
  }
-`  
+```
 - Usefule Examples
   - https://forum.arduino.cc/t/how-can-i-achieve-the-104-a-power-consumption/619331   
-`
+
+```
 #include "ArduinoLowPower.h"
 
 void setup() {
@@ -57,5 +58,5 @@ void loop() {
   delay(500);
   LowPower.deepSleep(2000);
 }
-`
+```
 
