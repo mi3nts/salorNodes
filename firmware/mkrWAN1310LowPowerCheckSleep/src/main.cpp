@@ -59,16 +59,27 @@ bool PA1010DOnline;
 unsigned long resetTimeMillis =  18000000 + random(1000)*60;
 unsigned long startTimeMillis = millis();
 
+
+
 void setup() {
 
   // Initiating Serial Communications for debugging purposes
   initializeSerialMints();
   initializeSerial1Mints();
 
+  // analogReadResolution(12);
+  
+  // Set digital pins to input  to save on current drain
+  for (int i=0; i < 15; i++) 
+  {
+    pinMode(i, INPUT_PULLUP);
+  }
+
   Serial.print("==========================================");
   Serial.print("========== MINTS SALOR  NODES ============");
   Serial.print("==========================================");
   
+
   Serial.println("Reset time (ms) = ");
   Serial.println(resetTimeMillis);
 
@@ -99,86 +110,70 @@ void setup() {
 
   // Serial.println(BOARD_TYPE);
 }
+void delaySetup(){
+  Watchdog.reset();
+  LowPower.sleep(sensingPeriod);
+  Watchdog.reset();
+  initializeSerialMints();
+  initializeSerial1Mints();
+  Serial.println(millis());
+
+}
+
 
 void loop() {
   
   Serial.println("Reading IPS7100");
   readIPS7100();
-  Watchdog.reset();
-  LowPower.sleep(sensingPeriod);
-  Serial.println(millis());
+  delaySetup();
 
   Serial.println("Reading BME280");
   readBME280();
-  Watchdog.reset();
-  LowPower.sleep(sensingPeriod);
-  Serial.println(millis());
+  delaySetup();
   
   Serial.println("Reading IPS7100");
   readIPS7100();
-  Watchdog.reset();
-  LowPower.sleep(sensingPeriod);
-  Serial.println(millis());
-  
+  delaySetup();
+
   Serial.println("Reading SCD30");
   readSCD30();
-  Watchdog.reset();
-  LowPower.sleep(sensingPeriod);
-  Serial.println(millis());
+  delaySetup();
 
   Serial.println("Reading IPS7100");
   readIPS7100();
-  Watchdog.reset();
-  LowPower.sleep(sensingPeriod);
-  Serial.println(millis());
+  delaySetup();
 
   Serial.println("Reading AS7265X1");
   readAS7265X1();
-  Watchdog.reset();
-  LowPower.sleep(sensingPeriod);
-  Serial.println(millis());
+  delaySetup();
 
   Serial.println("Reading IPS7100");
   readIPS7100();
-  Watchdog.reset();
-  LowPower.sleep(sensingPeriod);
-  Serial.println(millis());
 
   Serial.println("Reading AS7265X2");
   readAS7265X2();
-  Watchdog.reset();
-  LowPower.sleep(sensingPeriod);
-  Serial.println(millis());
+  delaySetup();
 
   Serial.println("Reading RG15");
   readRG15()  ;
-  Watchdog.reset();
-  LowPower.sleep(sensingPeriod);
-  Serial.println(millis());
+  delaySetup();
 
   Serial.println("Reading IPS7100");
   readIPS7100();
-  Watchdog.reset();
-  LowPower.sleep(sensingPeriod);
-  Serial.println(millis());
+  delaySetup();
 
   Serial.println("Reading MLRPS001");
   readMLRPS001(true)  ;
-  Watchdog.reset();
-  LowPower.sleep(sensingPeriod);
-  Serial.println(millis());
+  delaySetup();
 
   Serial.println("Reading IPS7100");
   readIPS7100();
-  Watchdog.reset();
-  LowPower.sleep(sensingPeriod);
-  Serial.println(millis());
+  delaySetup();
 
   Serial.println("Reading PA1010D");
   readPA1010D()  ;
-  Watchdog.reset();
-  LowPower.sleep(sensingPeriod);
-  Serial.println(millis());
+  delaySetup();
+
 
   if ( millis()- startTimeMillis >=resetTimeMillis) {
     // It's time to reset
