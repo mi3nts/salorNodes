@@ -64,6 +64,7 @@ void setup() {
   // Initiating Serial Communications for debugging purposes
   initializeSerialMints();
   initializeSerial1Mints();
+  analogReadResolution(12);
 
   Serial.print("==========================================");
   Serial.print("========== MINTS SALOR  NODES ============");
@@ -80,7 +81,7 @@ void setup() {
 
   loraInitMints();
   resetLoRaMints(10,1);
-  // Serial.println((analogRead(A0) / 1023.0)*3.3*2);
+  
   BME280Online   = initializeBME280();
   SCD30Online    = initializeSCD30();
   AS7265XOnline  = initializeAS7265X();

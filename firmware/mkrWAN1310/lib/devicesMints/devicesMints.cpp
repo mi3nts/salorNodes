@@ -134,12 +134,16 @@ bool initializeSCD30(){
     
     delay(10);
     scd30.reset();
+    
     delay(10);
-    Serial.println(scd30.setMeasurementInterval(30));
+    scd30.setMeasurementInterval(30);
+    // Serial.println(scd30.setMeasurementInterval(30));
     delay(10);
-    Serial.println(scd30.setAutoSelfCalibration(true));
+    scd30.setAutoSelfCalibration(true);
+    // Serial.println(scd30.setAutoSelfCalibration(true));
     delay(10);
-    Serial.println(scd30.beginMeasuring());
+    scd30.beginMeasuring();
+    // Serial.println(scd30.beginMeasuring());
 
     delay(1);
     Serial.println("SCD30 Initiated");
@@ -463,7 +467,7 @@ int readMLRPS001(bool initCheck){
 
 
 bool initializePA1010D(){
-  Serial.print("PA1010D initiating");
+  Serial.println("PA1010D initiating");
   delay(10);
   bool gpsStatus = pa1010d.begin(0x10);  // The I2C address to use is 0x10
   if (gpsStatus) {
@@ -481,7 +485,7 @@ bool initializePA1010D(){
       pa1010d.sendCommand(PMTK_Q_RELEASE);
       delay(10);
       pa1010d.sendCommand(PMTK_ENABLE_SBAS);
-      Serial.print("PA1010D initiated");
+      Serial.println("PA1010D initiated");
   }
 
 
@@ -580,73 +584,3 @@ int readPA1010D()
 
     return - 100;
     }
-// uint8_t hour;          ///< GMT hours
-        // uint8_t minute;        ///< GMT minutes
-        // uint8_t seconds;       ///< GMT seconds
-        // uint16_t milliseconds; ///< GMT milliseconds
-        // uint8_t year;          ///< GMT year
-        // uint8_t month;         ///< GMT month
-        // uint8_t day;           ///< GMT day
-        //  nmea_float_t latitude;  ///< Floating point latitude value in degrees/minutes
-        //                           ///< as received from the GPS (DDMM.MMMM)
-        //   nmea_float_t longitude; ///< Floating point longitude value in degrees/minutes
-        //                           ///< as received from the GPS (DDDMM.MMMM)
-
-          /** Fixed point latitude and longitude value with degrees stored in units of
-            1/10000000 of a degree. See pull #13 for more details:
-            https://github.com/adafruit/Adafruit-GPS-Library/pull/13 */
-          // int32_t latitude_fixed;  ///< Fixed point latitude in decimal degrees.
-          //                          ///< Divide by 10000000.0 to get a double.
-          // int32_t longitude_fixed; ///< Fixed point longitude in decimal degrees
-          //                          ///< Divide by 10000000.0 to get a double.
-
-          // nmea_float_t latitudeDegrees;  ///< Latitude in decimal degrees
-          // nmea_float_t longitudeDegrees; ///< Longitude in decimal degrees
-          // nmea_float_t geoidheight;      ///< Diff between geoid height and WGS84 height
-          // nmea_float_t altitude;         ///< Altitude in meters above MSL
-          // nmea_float_t speed;            ///< Current speed over ground in knots
-          // nmea_float_t angle;            ///< Course in degrees from true north
-          // nmea_float_t magvariation; ///< Magnetic variation in degrees (vs. true north)
-          // nmea_float_t HDOP; ///< Horizontal Dilution of Precision - relative accuracy
-          //                    ///< of horizontal position
-          // nmea_float_t VDOP; ///< Vertical Dilution of Precision - relative accuracy
-          //                    ///< of vertical position
-          // nmea_float_t PDOP;
-          // uint8_t fixquality;    ///< Fix quality (0, 1, 2 = Invalid, GPS, DGPS)
-          // uint8_t fixquality_3d; ///< 3D fix quality (1, 3, 3 = Nofix, 2D fix, 3D fix)
-          // uint8_t satellites;
-
-
-
-
-
-      //   Serial.println("New Fix Found");
-      //   Serial.println(pa1010d.lastNMEA());
-      //    Serial.print("Time: ");
-      //   if (pa1010d.hour < 10) { Serial.print('0'); }
-      //   Serial.print(pa1010d.hour, DEC); Serial.print(':');
-      //   if (pa1010d.minute < 10) { Serial.print('0'); }
-      //   Serial.print(pa1010d.minute, DEC); Serial.print(':');
-      //   if (pa1010d.seconds < 10) { Serial.print('0'); }
-      //   Serial.print(pa1010d.seconds, DEC); Serial.print('.');
-      //   if (pa1010d.milliseconds < 10) {
-      //     Serial.print("00");
-      //     } else if (pa1010d.milliseconds > 9 && pa1010d.milliseconds < 100) {
-      //       Serial.print("0");
-      //     }
-      // Serial.println(pa1010d.milliseconds);
-      // Serial.print("Date: ");
-      // Serial.print(pa1010d.day, DEC); Serial.print('/');
-      // Serial.print(pa1010d.month, DEC); Serial.print("/20");
-      // Serial.println(pa1010d.year, DEC);
-      // Serial.print("Fix: "); Serial.print((int)pa1010d.fix);
-      // Serial.print(" quality: "); Serial.println((int)pa1010d.fixquality);
-      // Serial.print("Location: ");
-      // Serial.print(pa1010d.latitude, 4); Serial.print(pa1010d.lat);
-      // Serial.print(", ");
-      // Serial.print(pa1010d.longitude, 4); Serial.println(pa1010d.lon);
-      // Serial.print("Speed (knots): "); Serial.println(pa1010d.speed);
-      // Serial.print("Angle: "); Serial.println(pa1010d.angle);
-      // Serial.print("Altitude: "); Serial.println(pa1010d.altitude);
-      // Serial.print("Satellites: "); Serial.println((int)pa1010d.satellites);
-      // delay(1000);
