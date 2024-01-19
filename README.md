@@ -1,6 +1,11 @@
 # salorNodes
 Contains firmware for mints Solar powered Arduino based LORa nodes
 
+## Further Additions
+- On january 4rth the Chirpstack network was compromised and as such V1 deployment sensors did not come back after reinstation of chirpstack. And this means that the lorawan radio does not power cycle with the microcontroller. Hence needs a forced reboot for the radio itself.
+- Add confirmed data pings, If not confirmed reboot the node.
+
+
 ## Resources
 - Generic Library Used: https://github.com/arduino-libraries/MKRWAN
 - AT Commands:
