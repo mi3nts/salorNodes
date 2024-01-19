@@ -8,15 +8,20 @@ void loraInitMints()
 {
 
   Watchdog.reset();
+
   
-  delay(10);
+  Serial.println("Rebooting the LoRaWAN Radio");
+  modem.restart();
+  delay(500);
+
   if (!modem.begin(US915)) {
     Serial.println("Failed to start module");
-    while (1) {}
+    while (1) {
+      Serial.println("Rebooting the arduino");
+    }
   };
 
-  delay(1000);
-
+  delay(500);
   Serial.print("Your module version is: ");
   Serial.println(modem.version());
   Serial.print("Your device EUI is: ");
@@ -27,46 +32,53 @@ void loraInitMints()
   Serial.println("- MKR WAN 1310 Channel Masking -");
   Serial.println("--------------------------------");
   Serial.println(modem.getChannelMask());
-
   delay(10);
 
-
   // MASK MATCHING MINTS LORAWAN CONFIGARATION 
+  
   modem.sendMask("000000000000ff0000000000");
   Serial.println(modem.getChannelMask());
 
    //  Adaptive data rates setting up
-  Serial.println("Setting Adaptive Data  Rates");
+  Serial.println("Setting Adaptive Data Rates");
   modem.setADR(true);  
 
   Serial.println("Trying to connect into the mints network");
-  Watchdog.reset();
 
-  //  Changing join command to cater the time
+  Watchdog.disable();
   join(0);
-
+  int countdownMS = Watchdog.enable(16000); 
 }
-
-
 
 void join(u_int8_t trialIndex) {
   // Try to connect --> CHECK How many seconds it takes to connect
-  int connected = modem.joinOTAA(appEui, appKey);
-  Serial.println("Trying to connect to the MINTS LoRaWAN Network.");    
-  if (!connected) {
-    Serial.println("Unable to find the mints network, trying again");
-    delay(10);
-    trialIndex++;
-    if (trialIndex < 10) {
-      join(trialIndex + 1 );
-    }else{
-      join(0);
-    }
+  trialIndex++;
+  Serial.print("Trial Index: ");
+  Serial.println(trialIndex);
   
+  int connected = modem.joinOTAA(appEui, appKey);
+
+  Serial.println("Trying to connect to the MINTS LoRaWAN Network."); 
+  Serial.print("Join Status: ");
+  Serial.println(connected);
+
+  if (!connected) {
+    Serial.println("Unable to find the MINTS LoRaWAN Network, trying again");
+    delay(10);
+    if (trialIndex < 10) {
+      join(trialIndex);
+    }else{
+      //  Rebooting sequence
+      int countdownMS = Watchdog.enable(16000); 
+      delay(100000);
+    }
   }else{
     Serial.println("Connected to the MINTS LoRaWAN Network.");
+    return;
   }
 }
+
+
 
 int loRaSendMints(byte sendOut[], uint8_t numOfBytes, uint8_t portNum){
     Watchdog.reset();
