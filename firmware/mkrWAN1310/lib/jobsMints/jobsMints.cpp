@@ -7,7 +7,7 @@ void initializeSerialMints(){
 
 void initializeSerial1Mints(){
     Serial1.begin(9600);
-    Serial1.println("Serial1 Port Open");
+    Serial.println("Serial1 Port Open");
 }
 
 
