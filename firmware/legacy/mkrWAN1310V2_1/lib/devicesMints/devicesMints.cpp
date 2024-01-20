@@ -501,6 +501,7 @@ int readMLRPS001(bool initCheck){
 
 
 bool initializePA1010D(){
+  Watchdog.reset();
   Serial.println("PA1010D initiating");
   delay(10);
   bool gpsStatus = pa1010d.begin(0x10);  // The I2C address to use is 0x10

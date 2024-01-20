@@ -1,6 +1,5 @@
-
 // # ***************************************************************************
-// #   Salor Nodes 
+// #   Salor Nodes
 // #   ---------------------------------
 // #   Written by: Lakitha Omal Harindha Wijeratne
 // #   - for -
@@ -19,12 +18,19 @@
 
 // ADD LINKS OF ALL LIBRARIES USED 
 
+// Remove Initial Delay
+// Check All Inits for watchdog resets 
+// Get some scenarios 
+
+
+
 #include <Arduino.h>
 #include "jobsMints.h"
 #include "devicesMints.h"
 #include "loRaMints.h"
 
 int countdownMS = Watchdog.enable(16000); 
+
 
 unsigned long sensingPeriod = SENSING_PERIOD  ;
 
@@ -41,6 +47,7 @@ bool AS7265XOnline;
 
 bool RG15Online;
 
+
 // IPS7100 
 bool IPS7100Online;
 IpsSensor ips7100;
@@ -56,38 +63,35 @@ powerStatus currentPowerStatus;
 Adafruit_GPS pa1010d(&Wire);
 bool PA1010DOnline;
 
-// Every 5 + 0 to 1 hour reboot
+// Initial Setup
 unsigned long resetTimeMillis =  18000000 + random(1000)*60;
 unsigned long startTimeMillis = millis();
 
-// Every 2 hours sending a confirmed data packet
-unsigned long resetTimeConfirmedMillis = 7200000;
+// Confirmed data send
+unsigned long resetTimeConfirmedMillis = 150000;
 unsigned long startTimeConfirmedMillis = millis();
 
-void setup() {
 
-  // delay(2000);  // Debugging Purposes only
+void setup() {
+  delay(2000);  // Debugging Purposes only
 
   // Initiating Serial Communications for debugging purposes
   initializeSerialMints();
   initializeSerial1Mints();
-
+  
   Serial.println();
   Serial.println("==========================================");
   Serial.println("========== MINTS SALOR  NODES ============");
   Serial.println("==========================================");
+
   
-  Serial.print("Enabled the Watchdog tmer with max countdown of ");
+  Serial.print("Enabled the watchdog with max countdown of ");
   Serial.print(countdownMS, DEC);
   Serial.println(" milliseconds!");
   Serial.println();
-
+   
   Serial.print("Reset time (ms) = ");
   Serial.println(resetTimeMillis);
-  Serial.println();
-
-  Serial.print("Confirmed data check time (ms) = ");
-  Serial.println(resetTimeConfirmedMillis);
   Serial.println();
 
   MLRPS001Online = initializeMLRPS001();
@@ -107,25 +111,93 @@ void setup() {
    
   resetIPS7100(IPS7100ResetTime);
 
+
+
+  // Serial.println(BOARD_TYPE);
 }
 
 void loop() {
-  readRunner( readIPS7100, "IPS7100", IPS7100Online, sensingPeriod);
-  readRunner(  readBME280,  "BME280",  BME280Online, sensingPeriod);
-  readRunner( readIPS7100, "IPS7100", IPS7100Online, sensingPeriod);
-  readRunner(   readSCD30,   "SCD30",   SCD30Online, sensingPeriod);
-  readRunner( readIPS7100, "IPS7100", IPS7100Online, sensingPeriod);
-  readRunner(readAS7265X1,"AS7265X1", AS7265XOnline, sensingPeriod);
-  readRunner( readIPS7100, "IPS7100", IPS7100Online, sensingPeriod);
-  readRunner(readAS7265X2,"AS7265X2", AS7265XOnline, sensingPeriod);
-  readRunner( readIPS7100, "IPS7100", IPS7100Online, sensingPeriod);
-  readRunner(    readRG15,    "RG15",    RG15Online, sensingPeriod);
-  readRunner( readIPS7100, "IPS7100", IPS7100Online, sensingPeriod);
-  readRunner( readPA1010D, "PA1010D", PA1010DOnline, sensingPeriod);
-  readRunner( readIPS7100, "IPS7100", IPS7100Online, sensingPeriod);
-  readRunnerBool(readMLRPS001, "PA1010D", PA1010DOnline, sensingPeriod, true);
+  
+  Serial.println("Reading IPS7100");
+  readIPS7100();
+  Watchdog.reset();
+  delay(sensingPeriod);
+  Serial.println(millis());
+
+  Serial.println("Reading BME280");
+  readBME280();
+  Watchdog.reset();
+  delay(sensingPeriod);
+  Serial.println(millis());
+  
+  Serial.println("Reading IPS7100");
+  readIPS7100();
+  Watchdog.reset();
+  delay(sensingPeriod);
+  Serial.println(millis());
+  
+  Serial.println("Reading SCD30");
+  readSCD30();
+  Watchdog.reset();
+  delay(sensingPeriod);
+  Serial.println(millis());
+
+  Serial.println("Reading IPS7100");
+  readIPS7100();
+  Watchdog.reset();
+  delay(sensingPeriod);
+  Serial.println(millis());
+
+  Serial.println("Reading AS7265X1");
+  readAS7265X1();
+  Watchdog.reset();
+  delay(sensingPeriod);
+  Serial.println(millis());
+
+  Serial.println("Reading IPS7100");
+  readIPS7100();
+  Watchdog.reset();
+  delay(sensingPeriod);
+  Serial.println(millis());
+
+  Serial.println("Reading AS7265X2");
+  readAS7265X2();
+  Watchdog.reset();
+  delay(sensingPeriod);
+  Serial.println(millis());
+
+  Serial.println("Reading RG15");
+  readRG15()  ;
+  Watchdog.reset();
+  delay(sensingPeriod);
+  Serial.println(millis());
+
+  Serial.println("Reading IPS7100");
+  readIPS7100();
+  Watchdog.reset();
+  delay(sensingPeriod);
+  Serial.println(millis());
+
+  Serial.println("Reading MLRPS001");
+  readMLRPS001(true)  ;
+  Watchdog.reset();
+  delay(sensingPeriod);
+  Serial.println(millis());
+
+  Serial.println("Reading IPS7100");
+  readIPS7100();
+  Watchdog.reset();
+  delay(sensingPeriod);
+  Serial.println(millis());
+
+  Serial.println("Reading PA1010D");
+  readPA1010D()  ;
+  Watchdog.reset();
+  delay(sensingPeriod);
+  Serial.println(millis());
 
   if ( millis()- startTimeMillis >=resetTimeMillis) {
+    // It's time to reset
     Serial.println("Resetting node");
     delay(100000);
   }
@@ -135,4 +207,7 @@ void loop() {
     Serial.println("Sending a confirmation data packed");
     resetLoRaMints(10,2,true);
   }
+
+
+
 }

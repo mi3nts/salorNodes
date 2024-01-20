@@ -2,13 +2,9 @@
 #define JOBS_MINTS_H
 
 #include <Arduino.h>
-#include <Adafruit_SleepyDog.h>
 
-void readRunner(int (*readFunction)(), String sensorID, bool sensorOnline, uint32_t sensingPeriod);
-void readRunnerBool(int (*readFunction)(bool), String sensorID, bool sensorOnline, uint32_t sensingPeriod,bool boolInput);
 void initializeSerialMints();
 void initializeSerial1Mints();
-
 void sensorPrintMints(String sensor,String readings[],uint8_t numOfvals);
 
 

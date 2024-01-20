@@ -1,36 +1,5 @@
 #include "jobsMints.h"
 
-void readRunner(int (*readFunction)(), String sensorID, bool sensorOnline, uint32_t sensingPeriod){
-  Serial.println();
-  if(sensorOnline){ 
-    Serial.print("Reading ");
-    Serial.println(sensorID);
-    readFunction();
-    Watchdog.reset();
-    delay(sensingPeriod);
-  }else{
-    Serial.print(sensorID);
-    Serial.print(" Offline");
-    
-  }
-}
-
-
-void readRunnerBool(int (*readFunction)(bool), String sensorID, bool sensorOnline, uint32_t sensingPeriod,bool boolInput){
-  Serial.println();
-  if(sensorOnline){ 
-    Serial.print("Reading ");
-    Serial.println(sensorID);
-    readFunction(boolInput);
-    Watchdog.reset();
-    delay(sensingPeriod);
-  }else{
-    Serial.print(sensorID);
-    Serial.print(" Offline");
-  }
-}
-
-
 void initializeSerialMints(){
     Serial.begin(9600);
     Serial.println("Serial Port Open");
@@ -38,7 +7,7 @@ void initializeSerialMints(){
 
 void initializeSerial1Mints(){
     Serial1.begin(9600);
-    Serial.println("Serial1 Port Open");
+    Serial1.println("Serial1 Port Open");
 }
 
 
@@ -158,6 +127,78 @@ void splitString(const String &input, String substrings[], int &substringCount, 
   }
 
 }
+
+
+
+
+
+// void loraSendMints(byte sendOut[], uint8_t numOfBytes, uint8_t timeOut, uint8_t portNum){
+//   Serial.println("");
+//   lora.setPort(portNum);
+//   lora.transferPacket(sendOut,numOfBytes,timeOut);
+
+// }
+
+// byte minMaxFloatMints(float inVal, float min, float max){
+//   if (inVal<min) {
+//     return 0;
+//   }else if (inVal>max){
+//     return 255;
+//   }else {
+//   return round(inVal);
+//   }
+
+// }
+
+// unsigned long minMaxFloat2ULongMints(float inVal, float min, float max){
+//   if (inVal<min) {
+//     return 1022;
+//   }else if (inVal>max){
+//     return 1023;
+//   }else {
+//   return round(inVal);
+//   }
+
+// }
+
+// byte sensorPrintBytes(String sensor,byte readings[],uint8_t numOfvals){
+
+//   Serial.print("#mintsB!");Serial.print(sensor);Serial.print(">");
+//   for (int i = 0; i < numOfvals; ++i)
+//       {
+//         Serial.print(readings[i]);Serial.print(":");
+//       }
+//       Serial.print("~");
+// }
+
+
+// void sensorPrintFloats(String sensor,float readings[],uint8_t numOfvals){
+//   Serial.print("#mintsF!");Serial.print(sensor);Serial.print(">");
+//   for (int i = 0; i < numOfvals; ++i)
+//       {
+//         Serial.print(String(readings[i]));Serial.print(":");
+//       }
+//       Serial.print("~");
+// }
+
+// void sensorPrintULongs(String sensor,unsigned long readings[],uint8_t numOfvals){
+//   Serial.print("#mintsUL!");Serial.print(sensor);Serial.print(">");
+//   for (int i = 0; i < numOfvals; ++i)
+//       {
+//         Serial.print(String(readings[i]));Serial.print(":");
+//       }
+//       Serial.print("~");
+// }
+
+
+
+
+
+
+
+
+
+
 
 
 

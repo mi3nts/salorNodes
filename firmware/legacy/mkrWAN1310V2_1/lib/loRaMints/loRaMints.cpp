@@ -6,11 +6,12 @@ String appKey = SECRET_APP_KEY;
 
 void loraInitMints()
 {
+  delay(10);
   if (!modem.begin(US915)) {
     Serial.println("Failed to start module");
     while (1) {
         Serial.println("Rebooting the arduino");
-        Watchdog.enable(16000); 
+        // Watchdog.enable(16000); 
         delay(100000);
     }
   };
@@ -25,12 +26,12 @@ void loraInitMints()
     Serial.println("Failed to start module");
     while (1) {
         Serial.println("Rebooting the arduino");
-        Watchdog.enable(16000); 
+        // Watchdog.enable(16000); 
         delay(100000);
     }
   };
   
-  Watchdog.enable(16000); 
+  // Watchdog.enable(16000); 
   
   delay(1000);
   Serial.print("Your module version is: ");

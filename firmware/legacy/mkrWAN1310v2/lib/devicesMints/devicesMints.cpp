@@ -13,15 +13,10 @@ void resetIPS7100(uint32_t secondsIn){
 
 bool initializeIPS7100(){
     Watchdog.reset();
-    delay(10);
-    ips7100.update();
-    if(ips7100.getPC01()> 0) {
-      Serial.println("IPS7100 Initiated");
-      delay(10);
-      return true;
-    }else{
-      return false;   
-    }
+    Serial.println("IPS7100 Initiated");
+   delay(10);
+   return true;
+
 }
 
 int readIPS7100(){
@@ -74,25 +69,25 @@ int readIPS7100(){
   sensorPrintBytes(sensorName,sendOutPM,sizeInBytesPM);
         Serial.println(" ");                 
   sensorPrintBytes(sensorName,sendOut,sizeInBytes);
-        Serial.println(" ");  
+     Serial.println(" ");  
     if (valuesPC[0] >  0 ){
+      Watchdog.reset();
       return loRaSendMints(sendOut,sizeInBytes, portIn);
+
     }
     else {
+      Watchdog.reset();
       return -100;
     }
 }
 
 
 bool initializeBME280()
-{   
-  Watchdog.reset();
-  delay(10);
-
-  bool status = bme280.begin();  
-  // unsigned status = bme280.begin();  
+{    Watchdog.reset();
+    unsigned status = bme280.begin();  
     if (status) {
         Serial.println("BME280 Initiated");
+        delay(10);
         return true;
     }else{        
         Serial.println("Could not find a valid BME280 sensor, check wiring, address, sensor ID!");
@@ -101,6 +96,7 @@ bool initializeBME280()
         Serial.print("ID of 0x56-0x58 represents a BMP 280,\n");
         Serial.print("ID of 0x60 represents a BME 280.\n");
         Serial.print("ID of 0x61 represents a BME 680.\n");
+        delay(10);
         return false;
     }
 }
@@ -137,17 +133,14 @@ int readBME280()
   Serial.println(" ");   
   sensorPrintBytes(sensorName,sendOut,sizeInBytes);
   Serial.println(" ");   
+  Watchdog.reset();
   return loRaSendMints(sendOut,sizeInBytes, portIn);
 }
 
 // SCD30 ---------------------------------------
 bool initializeSCD30(){
   Watchdog.reset();
-  delay(10);
-
-  bool status = scd30.begin();  
-  
-  if (status) {
+  if (scd30.begin()) {
     
     delay(10);
     scd30.reset();
@@ -164,10 +157,11 @@ bool initializeSCD30(){
 
     delay(1);
     Serial.println("SCD30 Initiated");
+    delay(10);
     return true;
   }else{
     Serial.println("SCD30 not found");
-    delay(1);
+    delay(10);
     return false;
   }
 }
@@ -202,25 +196,24 @@ int readSCD30(){
       sensorPrintBytes(sensorName,sendOut,sizeInBytes);
       Serial.println(" ");   
       if (values[0] >  0 )
-      {
-            return loRaSendMints(sendOut,sizeInBytes, portIn);
+      { 
+        Watchdog.reset();
+        return loRaSendMints(sendOut,sizeInBytes, portIn);
       }
     }
-        delay(100);
+    delay(100);
   }
   Serial.println("SCD30 Data invalid"); 
+  Watchdog.reset();
   return -100;
 }
 
 
-// AS7265X ---------------------------------------
+
+// SCD30 ---------------------------------------
 bool initializeAS7265X(){
   Watchdog.reset();
-  delay(10);
-  
-  bool status = as7265x.begin();
-
-  if (status) {
+  if (as7265x.begin()) {
     as7265x.setIntegrationCycles(1);
     as7265x.disableBulb(AS7265x_LED_WHITE);
     as7265x.disableBulb(AS7265x_LED_IR);
@@ -229,10 +222,11 @@ bool initializeAS7265X(){
     as7265x.disableIndicator();
     delay(1);
     Serial.println("AS7265x Initiated");
+    delay(10);
     return true;
   }else{
     Serial.println("AS7265x not found");
-    delay(1);
+    delay(10);
     return false;
   }
 }
@@ -272,6 +266,7 @@ int readAS7265X(){
     Serial.println(" ");   
     sensorPrintBytes(sensorName,sendOut,sizeInBytes);
     Serial.println(" ");   
+    Watchdog.reset();
     return loRaSendMints(sendOut,sizeInBytes, portIn);
   }
 
@@ -301,6 +296,7 @@ int readAS7265X1(){
     Serial.println(" ");   
     sensorPrintBytes(sensorName,sendOut,sizeInBytes);
     Serial.println(" ");   
+    Watchdog.reset();
     return loRaSendMints(sendOut,sizeInBytes, portIn);
   }
 
@@ -332,12 +328,15 @@ int readAS7265X2(){
     Serial.println(" ");   
     sensorPrintBytes(sensorName,sendOut,sizeInBytes);
     Serial.println(" ");   
+    Watchdog.reset();
     return loRaSendMints(sendOut,sizeInBytes, portIn);
   }
 
+
+//  Serial.println(Serial1.readString());
 bool initializeRG15(){
+
   Watchdog.reset();
-  delay(10);
   Serial1.readString();
   Serial1.println('R');
   delay(10);
@@ -357,16 +356,16 @@ bool initializeRG15(){
   if (rainBuffer.indexOf("Acc") != -1) {
     Serial.println("RG15 Initiated");
     // Serial.println(rainBuffer);
+    delay(10);
     return true;
   }else{
     Serial.println("RG15 not found");
-    delay(1);
+    delay(10);
     return false;
   }
 }
 
 int readRG15(){
-  Serial.println("RG15 reader");
   uint8_t sizeIn = 4;
   uint8_t portIn = 61;
   String sensorName = "RG15" ;
@@ -406,9 +405,11 @@ int readRG15(){
     Serial.println(" ");   
     sensorPrintBytes(sensorName,sendOut,sizeInBytes);
     Serial.println(" ");   
+    Watchdog.reset();
     return loRaSendMints(sendOut,sizeInBytes, portIn);
     }
     else{
+      Watchdog.reset();
       return -100;
     }
   }
@@ -416,8 +417,6 @@ int readRG15(){
 // INS219s ---------------------------------------
 bool initializeMLRPS001(){
   Watchdog.reset();
-  delay(10);
-
   bool batteryINA219Status = ina219Battery.begin();
   bool solarINA219Status   = ina219Solar.begin();
 
@@ -433,7 +432,7 @@ bool initializeMLRPS001(){
     Serial.println("Solar INA219 not found");
     delay(1);
   }
-
+  delay(10);
   return (batteryINA219Status && solarINA219Status);
 }
 
@@ -443,14 +442,11 @@ int readMLRPS001(bool initCheck){
   uint8_t sizeIn = 9;
   uint8_t portIn = 103;
   String sensorName = "MLRPS001" ;
-  
-  Serial.print("Battery Voltage: ");
-  currentPowerStatus.internalBatteryVoltage = (analogRead(A0) / 1023.0)*3.3*2;
-  Serial.print(currentPowerStatus.internalBatteryVoltage);
-  Serial.println(" V");
-  Serial.println();
 
 
+  Serial.println("Battery Voltage");
+  currentPowerStatus.internalBatteryVoltage = (analogRead(A0) / 4095.0)*3.3*2;
+  Serial.println(currentPowerStatus.internalBatteryVoltage);
   if (initCheck)
   {
     currentPowerStatus.batteryShuntVoltage   = ina219Battery.getShuntVoltage_mV();
@@ -482,11 +478,13 @@ int readMLRPS001(bool initCheck){
       Serial.println(" ");   
       sensorPrintBytes(sensorName,sendOut,sizeInBytes);
       Serial.println(" ");   
+      Watchdog.reset();
       return loRaSendMints(sendOut,sizeInBytes, portIn);
 
-    return 1;
+    // return 1;
     }
     else {
+      Watchdog.reset();
       return -200;
     }
   
@@ -495,6 +493,7 @@ int readMLRPS001(bool initCheck){
 
 bool initializePA1010D(){
   Watchdog.reset();
+  Serial.println("PA1010D initiating");
   delay(10);
   bool gpsStatus = pa1010d.begin(0x10);  // The I2C address to use is 0x10
   if (gpsStatus) {
@@ -515,7 +514,7 @@ bool initializePA1010D(){
       Serial.println("PA1010D initiated");
   }
 
-
+  delay(10);
   return gpsStatus;
 }
 
@@ -538,7 +537,7 @@ int readPA1010D()
     pa1010d.read();
     if (pa1010d.newNMEAreceived()) 
     {
-      // Serial.println(pa1010d.lastNMEA());
+      Serial.println(pa1010d.lastNMEA());
       if (!pa1010d.parse(pa1010d.lastNMEA())) 
       {
         //  Serial.println("No Fix found"); 
@@ -603,11 +602,13 @@ int readPA1010D()
         sensorPrintUInt8s(sensorName,valuesUint8,sizeInUint8);
 
         sensorPrintBytes(sensorName,sendOut,sizeInBytes);
+        
+        Watchdog.reset();
         return loRaSendMints(sendOut,sizeInBytes, portIn);
   
       }
     }
   }
-
+    Watchdog.reset();
     return - 100;
-    }
+  }
