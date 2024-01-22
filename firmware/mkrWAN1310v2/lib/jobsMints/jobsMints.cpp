@@ -11,7 +11,7 @@ void readRunner(int (*readFunction)(), String sensorID, bool sensorOnline, uint3
   }else{
     Serial.print(sensorID);
     Serial.print(" Offline");
-    
+    delay(sensingPeriod);
   }
 }
 
@@ -27,6 +27,7 @@ void readRunnerBool(int (*readFunction)(bool), String sensorID, bool sensorOnlin
   }else{
     Serial.print(sensorID);
     Serial.print(" Offline");
+    delay(sensingPeriod);
   }
 }
 
