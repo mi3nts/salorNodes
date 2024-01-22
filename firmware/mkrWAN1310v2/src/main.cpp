@@ -125,15 +125,18 @@ void loop() {
   readRunner( readIPS7100, "IPS7100", IPS7100Online, sensingPeriod);
   readRunnerBool(readMLRPS001, "PA1010D", PA1010DOnline, sensingPeriod, true);
 
-  if ( millis()- startTimeMillis >=resetTimeMillis) {
-    Serial.println("Resetting node");
-    delay(100000);
-  }
-
   if ( millis()- startTimeConfirmedMillis  >=resetTimeConfirmedMillis) {
     Watchdog.reset();
     Serial.println("Sending a confirmation data packed");
     resetLoRaMints(10,2,true);
     startTimeConfirmedMillis = millis();
+    delay(sensingPeriod);
   }
+  
+  if ( millis()- startTimeMillis >=resetTimeMillis) {
+    Serial.println("Resetting node");
+    delay(100000);
+  }
+
+
 }
