@@ -134,5 +134,6 @@ void loop() {
     Watchdog.reset();
     Serial.println("Sending a confirmation data packed");
     resetLoRaMints(10,2,true);
+    startTimeConfirmedMillis = millis();
   }
 }
