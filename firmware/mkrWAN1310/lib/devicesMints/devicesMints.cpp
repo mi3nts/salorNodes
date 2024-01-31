@@ -212,7 +212,7 @@ bool initializeAS7265X(){
   }else{
     Serial.println("AS7265x not found");
     delay(1);
-    return false;
+    return true;
   }
 }
 

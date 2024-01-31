@@ -36,5 +36,6 @@
             "tooltip": "PlatformIO: New Terminal",
             "commands": "platformio-ide.newTerminal"
         }
-    ]
+    ],
+    "cmake.sourceDirectory": "/Users/lakitha/gitHubRepos/salorNodes/firmware/mkrWAN1310/.pio/libdeps/mkrwan1310/Adafruit GFX Library"
 }
