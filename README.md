@@ -7,8 +7,8 @@ Contains firmware for mints Solar powered Arduino based LORa nodes
  - Incorporate confirmed data pings; if not confirmed, initiate a reboot for the node.
 
 ## Sensing Period
-```#define SENSING_PERIOD 9000; // mili seconds 
-```
+``` #define SENSING_PERIOD 9000; // mili seconds ```
+
 
 ## Resources
 - Generic Library Used: https://github.com/arduino-libraries/MKRWAN
