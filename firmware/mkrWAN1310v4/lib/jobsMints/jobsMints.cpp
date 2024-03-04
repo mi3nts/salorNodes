@@ -54,7 +54,7 @@ void sensorPrintMints(String sensor,String readings[],uint8_t numOfvals){
       Serial.print("~");
 }
 
-byte sensorPrintBytes(String sensor,byte readings[],uint8_t numOfvals){
+void sensorPrintBytes(String sensor,byte readings[],uint8_t numOfvals){
 
   Serial.print("#mintsB!");Serial.print(sensor);Serial.print(">");
   for (int i = 0; i < numOfvals; ++i)

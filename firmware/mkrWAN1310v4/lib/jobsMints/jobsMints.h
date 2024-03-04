@@ -18,7 +18,7 @@ void sensorPrintUInt16s(String sensor,uint16_t readings[],uint8_t numOfvals);
 void sensorPrintUInt8s(String sensor,uint8_t readings[],uint8_t numOfvals);
 
 void sensorPrintULongs(String sensor,unsigned long readings[],uint8_t numOfvals);
-byte sensorPrintBytes(String sensor,byte readings[],uint8_t numOfvals);
+void sensorPrintBytes(String sensor,byte readings[],uint8_t numOfvals);
 
 void deleteSubString(String &completeStr, String deleteStr);
 int countSubstrings(const String &mainString, const String &substringToCount);

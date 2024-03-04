@@ -1098,6 +1098,7 @@ private:
         int a = streamRead();
         if (a < 0) continue;
         data += (char)a;
+        // Serial.println(data);
         if (r1 && data.endsWith(r1)) {
           index = 1;
           goto finish;

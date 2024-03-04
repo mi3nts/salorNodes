@@ -57,12 +57,22 @@ Adafruit_GPS pa1010d(&Wire);
 bool PA1010DOnline;
 
 // Every 5 + 0 to 1 hour reboot
-unsigned long resetTimeMillis =  18000000 + random(1000)*60;
+unsigned long resetTimeMillis =  18000000;
 unsigned long startTimeMillis = millis();
 
 // Every 2 hours sending a confirmed data packet
 unsigned long resetTimeConfirmedMillis = 7200000;
 unsigned long startTimeConfirmedMillis = millis();
+
+// // Every 5 + 0 to 1 hour reboot
+// unsigned long resetTimeMillis =  120000;
+// unsigned long startTimeMillis = millis();
+
+// // Every 2 hours sending a confirmed data packet
+// unsigned long resetTimeConfirmedMillis = 60000;
+// unsigned long startTimeConfirmedMillis = millis();
+
+
 
 void setup() {
 

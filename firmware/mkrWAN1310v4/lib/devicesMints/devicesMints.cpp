@@ -559,7 +559,7 @@ int readPA1010D()
               };
 
         uint16_t valuesUint16[sizeInUint16]  = {
-                        uint16_t(pa1010d.year) + 2000,
+                        pa1010d.year + 2000,
               };
 
         uint8_t valuesUint8[sizeInUint8]  = {
