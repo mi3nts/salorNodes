@@ -59,13 +59,13 @@ void loraInitMints()
   // Watchdog.disable();
   Watchdog.reset();
   Serial.println("Trying to connect to the MINTS LoRaWAN Network."); 
-  join(0);
+  joinMints(0);
   Serial.println("Enabling the watchdog timer");
   // Watchdog.enable(16000); 
 }
 
 
-void join(u_int8_t trialIndex) {
+void joinMints(u_int8_t trialIndex) {
   trialIndex++;
   Serial.print("Trial index: ");
   Serial.println(trialIndex);
@@ -79,7 +79,7 @@ void join(u_int8_t trialIndex) {
     Serial.println("Unable to find the MINTS LoRaWAN Network, trying again");
     delay(10);
     if (trialIndex < 3) {
-      join(trialIndex);
+      joinMints(trialIndex);
     }else{  
       Serial.println("MINTS LoRaWAN Network not found. Rebooting node");
       // Watchdog.enable(16000); 
@@ -111,6 +111,10 @@ int loRaSendMintsConfirmed(byte sendOut[], uint8_t numOfBytes, uint8_t portNum){
     err = modem.endPacket(true);
     Serial.print("Error code: ");
     Serial.println(err);
+    Watchdog.reset();
+    delay(5000);
+    Watchdog.reset();
+    delay(4000);
     Watchdog.reset();
     delay(1000);
     return err;
