@@ -64,16 +64,6 @@ unsigned long startTimeMillis = millis();
 unsigned long resetTimeConfirmedMillis = 7200000;
 unsigned long startTimeConfirmedMillis = millis();
 
-// // Every 5 + 0 to 1 hour reboot
-// unsigned long resetTimeMillis =  120000;
-// unsigned long startTimeMillis = millis();
-
-// // Every 2 hours sending a confirmed data packet
-// unsigned long resetTimeConfirmedMillis = 60000;
-// unsigned long startTimeConfirmedMillis = millis();
-
-
-
 void setup() {
 
   // delay(2000);  // Debugging Purposes only
@@ -106,7 +96,7 @@ void setup() {
   }
 
   loraInitMints();
-  resetLoRaMints(10,1,true);
+  resetLoRaMints(1);
 
   BME280Online   = initializeBME280();
   SCD30Online    = initializeSCD30();
@@ -138,7 +128,7 @@ void loop() {
   if ( millis()- startTimeConfirmedMillis  >=resetTimeConfirmedMillis) {
     Watchdog.reset();
     Serial.println("Sending a confirmation data packed");
-    resetLoRaMints(10,2,true);
+    resetLoRaMints(2);
     startTimeConfirmedMillis = millis();
     delay(sensingPeriod);
   }

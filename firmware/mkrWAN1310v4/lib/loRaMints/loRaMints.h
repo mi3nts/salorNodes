@@ -16,7 +16,7 @@ void loraInitMints();
 void joinMints(u_int8_t trialIndex);
 
 //  Make this a boolean call
-void resetLoRaMints(uint8_t numOfTrysIn,uint8_t powerMode,bool confirmation);
+void resetLoRaMints(u_int8_t powerMode);
 
 int loRaSendMints(byte sendOut[],uint8_t numOfBytes,uint8_t portNum);
 

@@ -53,15 +53,11 @@ void loraInitMints()
   //  Adaptive data rates setting up
   Serial.println("Setting adaptive data rates");
   modem.setADR(true);  
-
-  Serial.println();
-  Serial.println("Disabling the watchdog timer");
-  // Watchdog.disable();
   Watchdog.reset();
+
   Serial.println("Trying to connect to the MINTS LoRaWAN Network."); 
   joinMints(0);
   Serial.println("Enabling the watchdog timer");
-  // Watchdog.enable(16000); 
 }
 
 
@@ -82,11 +78,14 @@ void joinMints(u_int8_t trialIndex) {
       joinMints(trialIndex);
     }else{  
       Serial.println("MINTS LoRaWAN Network not found. Rebooting node");
-      // Watchdog.enable(16000); 
       delay(100000);
     }
   }else{
     Serial.println("Connected to the MINTS LoRaWAN Network.");
+    Watchdog.reset();
+    delay(10000);
+    Watchdog.reset();
+    Serial.println();
   }
 }
 
@@ -112,9 +111,9 @@ int loRaSendMintsConfirmed(byte sendOut[], uint8_t numOfBytes, uint8_t portNum){
     Serial.print("Error code: ");
     Serial.println(err);
     Watchdog.reset();
-    delay(5000);
+    delay(10000);
     Watchdog.reset();
-    delay(4000);
+    delay(9000);
     Watchdog.reset();
     delay(1000);
     return err;
@@ -122,30 +121,44 @@ int loRaSendMintsConfirmed(byte sendOut[], uint8_t numOfBytes, uint8_t portNum){
 
 
 
-void resetLoRaMints(uint8_t numOfTrysIn,uint8_t powerMode,bool confirmation)
+
+void resetLoRaMints(uint8_t powerMode)
 {
+  Serial.println("Resetting the network");
+
   int err = -1;
   Serial.println("Sending data packets");
   byte sendOut[1];
   uint8_t portIn = 102;
   modem.setPort(portIn);
-  memcpy(sendOut,&powerMode,1);
 
-  for (uint16_t  cT = 1 ;cT<numOfTrysIn ; cT++){
-    Watchdog.reset();
-    if (confirmation){
+  u_int8_t successCount = 0 ;
+
+  for (uint8_t  cT = 1 + powerMode ;cT<=5+powerMode ; cT++){
+      Serial.println("Sending Singular Byted");
+      Watchdog.reset();
+      powerMode = cT;
+      memcpy(sendOut,&powerMode,1);
       err = loRaSendMintsConfirmed(sendOut,1, portIn);
-    }else{
-      err = loRaSendMints(sendOut,1, portIn);
-    }
-    if(err>0){
-      Serial.println("Gateway contacted");
-      Serial.println();
-      return;
-    }
+      
+      if(err>0){
+        Watchdog.reset();
+        successCount++;
+      }
+
+    Serial.println("Success Count");
+    Serial.println(successCount);
+      if (successCount > 3){
+        Serial.println("Gateway Contacted");
+        Watchdog.reset();
+        delay(10000);
+        Watchdog.reset();
+        Serial.println();
+        return ;
+      }
+    }    
+    Serial.println("Connection to the gateway is lost, reeboting node");
+    delay(100000);
   }
 
-  Serial.println("Connection to the gateway is lost, reeboting node");
-  delay(100000);
-  return;
-}
+
