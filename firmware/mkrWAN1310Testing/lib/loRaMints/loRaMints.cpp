@@ -53,11 +53,15 @@ void loraInitMints()
   //  Adaptive data rates setting up
   Serial.println("Setting adaptive data rates");
   modem.setADR(true);  
-  Watchdog.reset();
 
+  Serial.println();
+  Serial.println("Disabling the watchdog timer");
+  // Watchdog.disable();
+  Watchdog.reset();
   Serial.println("Trying to connect to the MINTS LoRaWAN Network."); 
   joinMints(0);
   Serial.println("Enabling the watchdog timer");
+  // Watchdog.enable(16000); 
 }
 
 
@@ -78,14 +82,14 @@ void joinMints(u_int8_t trialIndex) {
       joinMints(trialIndex);
     }else{  
       Serial.println("MINTS LoRaWAN Network not found. Rebooting node");
+      // Watchdog.enable(16000); 
       delay(100000);
     }
   }else{
     Serial.println("Connected to the MINTS LoRaWAN Network.");
-    Watchdog.reset();
+    Watchdog.reset(); 
     delay(10000);
-    Watchdog.reset();
-    Serial.println();
+    Watchdog.reset(); 
   }
 }
 
@@ -111,51 +115,56 @@ int loRaSendMintsConfirmed(byte sendOut[], uint8_t numOfBytes, uint8_t portNum){
     Serial.print("Error code: ");
     Serial.println(err);
     Watchdog.reset();
-    delay(10000);
+    delay(5000);
     Watchdog.reset();
-    delay(9000);
+    delay(4000);
     Watchdog.reset();
     delay(1000);
     return err;
 }
 
+
+
 void resetLoRaMints(uint8_t powerMode)
 {
-  Serial.println("Resetting the network");
-
   int err = -1;
   Serial.println("Sending data packets");
   byte sendOut[1];
   uint8_t portIn = 102;
   modem.setPort(portIn);
 
+  // Some of the logic here has to change  --> Get a success rate 
+  // Reset LoRa Mints is only confirmed with confirmed data packets 
   u_int8_t successCount = 0 ;
 
-  for (uint8_t  cT = 1 + powerMode ;cT<=5+powerMode ; cT++){
-      Serial.println("Sending Singular Byted");
-      Watchdog.reset();
+  for (uint8_t  cT = 1 ;cT<=5 ; cT++){
+      // Watchdog.reset();
       powerMode = cT;
       memcpy(sendOut,&powerMode,1);
       err = loRaSendMintsConfirmed(sendOut,1, portIn);
-      
       if(err>0){
-        Watchdog.reset();
+        // Watchdog.reset();
         successCount++;
+      // return;
       }
-
     Serial.println("Success Count");
     Serial.println(successCount);
-      if (successCount > 3){
-        Serial.println("Gateway Contacted");
-        Watchdog.reset();
-        delay(10000);
-        Watchdog.reset();
-        Serial.println();
-        return ;
-      }
+    if (successCount > 3){
+      Serial.println("Gateway Contacted");
+      return ;
+    }
+      delay(10000);
     }    
     Serial.println("Connection to the gateway is lost, reeboting node");
     delay(100000);
   }
 
+
+
+
+  
+
+  // Serial.println("Connection to the gateway is lost, reeboting node");
+  // delay(100000);
+  // return;
 
