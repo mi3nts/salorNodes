@@ -6,7 +6,7 @@
 #include <bluefruit.h>
 #include <iostream>
 #include <bitset>
-#include <Adafruit_NeoPixel.h>
+
 
 
 
