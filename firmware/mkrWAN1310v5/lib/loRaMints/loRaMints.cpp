@@ -63,6 +63,8 @@ void loraInitMints()
 
 void joinMints(u_int8_t trialIndex) {
   trialIndex++;
+      
+  afterCheckDelay();
   Serial.print("Trial index: ");
   Serial.println(trialIndex);
   
@@ -82,12 +84,25 @@ void joinMints(u_int8_t trialIndex) {
     }
   }else{
     Serial.println("Connected to the MINTS LoRaWAN Network.");
-    Watchdog.reset();
-    delay(10000);
-    Watchdog.reset();
+    
+    afterCheckDelay();
+
     Serial.println();
   }
 }
+
+
+void afterCheckDelay(){
+
+    Watchdog.reset();
+    delay(10000);
+    Watchdog.reset();
+    delay(10000);
+    Watchdog.reset();
+    delay(10000);
+    Watchdog.reset();
+}
+
 
 int loRaSendMints(byte sendOut[], uint8_t numOfBytes, uint8_t portNum){
     int err=-1;
@@ -110,12 +125,7 @@ int loRaSendMintsConfirmed(byte sendOut[], uint8_t numOfBytes, uint8_t portNum){
     err = modem.endPacket(true);
     Serial.print("Error code: ");
     Serial.println(err);
-    Watchdog.reset();
-    delay(10000);
-    Watchdog.reset();
-    delay(9000);
-    Watchdog.reset();
-    delay(1000);
+    afterCheckDelay();
     return err;
 }
 
@@ -131,13 +141,15 @@ void resetLoRaMints(uint8_t powerMode)
 
   u_int8_t successCount = 0 ;
 
-  for (uint8_t  cT = 1 + powerMode ;cT<=5+powerMode ; cT++){
-      Serial.println("Sending Singular Byted");
+  for (uint8_t  cT = powerMode ;cT<=5+powerMode ; cT++){
+      Serial.print("Sending Singular Byte with Data:");
+      Serial.println(cT);
+
       Watchdog.reset();
       powerMode = cT;
       memcpy(sendOut,&powerMode,1);
       err = loRaSendMintsConfirmed(sendOut,1, portIn);
-      
+      delay(10000);
       if(err>0){
         Watchdog.reset();
         successCount++;
@@ -145,7 +157,7 @@ void resetLoRaMints(uint8_t powerMode)
 
     Serial.println("Success Count");
     Serial.println(successCount);
-      if (successCount > 3){
+      if (successCount >= 3){
         Serial.println("Gateway Contacted");
         Watchdog.reset();
         delay(10000);

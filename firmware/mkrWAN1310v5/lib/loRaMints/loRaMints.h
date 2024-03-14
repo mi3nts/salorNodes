@@ -22,4 +22,6 @@ int loRaSendMints(byte sendOut[],uint8_t numOfBytes,uint8_t portNum);
 
 int loRaSendMintsConfirmed(byte sendOut[], uint8_t numOfBytes, uint8_t portNum);
 
+void afterCheckDelay();
+
 #endif

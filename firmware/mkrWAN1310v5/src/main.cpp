@@ -57,7 +57,7 @@ Adafruit_GPS pa1010d(&Wire);
 bool PA1010DOnline;
 
 // Every 5 + 0 to 1 hour reboot
-unsigned long resetTimeMillis =  18000000;
+unsigned long resetTimeMillis =  36000000 + random(1000)*120;
 unsigned long startTimeMillis = millis();
 
 // Every 2 hours sending a confirmed data packet
@@ -73,7 +73,7 @@ unsigned long testTime;
 
 void setup() {
 
-  // delay(2000);  // Debugging Purposes only
+  delay(2000);  // Debugging Purposes only
 
   // Initiating Serial Communications for debugging purposes
   initializeSerialMints();
@@ -119,15 +119,9 @@ void setup() {
 void loop() {
   // Send Heart Beat Pulse 
   // Start by sending a lorawan byte 
-  testTime = millis();
   readRunner( sendHBMints, "SendHBMints", true, sensingPeriod);
-  Serial.println(millis()-testTime);
-  testTime = millis();
   readRunner( readIPS7100, "IPS7100", IPS7100Online, sensingPeriod);
-  Serial.println(millis()-testTime);
-  testTime = millis();
   readRunner(  readBME280,  "BME280",  BME280Online, sensingPeriod);
-  Serial.println(millis()-testTime);
   readRunner( readIPS7100, "IPS7100", IPS7100Online, sensingPeriod);
   readRunner(   readSCD30,   "SCD30",   SCD30Online, sensingPeriod);
   readRunner( readIPS7100, "IPS7100", IPS7100Online, sensingPeriod);
@@ -142,12 +136,11 @@ void loop() {
   readRunnerBool(readMLRPS001, "PA1010D", PA1010DOnline, sensingPeriod, true);
   readRunner( readIPS7100, "IPS7100", IPS7100Online, sensingPeriod);
   
-  if ( millis()- startTimeConfirmedMillis  >=resetTimeConfirmedMillis) {
+  if ( millis()- startTimeConfirmedMillis  >= resetTimeConfirmedMillis) {
     Watchdog.reset();
     Serial.println("Sending a confirmation data packed");
     resetLoRaMints(2);
     startTimeConfirmedMillis = millis();
-    delay(sensingPeriod);
   }
   
   if ( millis()- startTimeMillis >=resetTimeMillis) {

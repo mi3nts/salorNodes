@@ -11,6 +11,7 @@ extern uint16_t setPin;
 extern uint16_t redLedPin;
 extern uint16_t blueLedPin;
 extern Adafruit_NeoPixel pixels;
+extern uint16_t checkPin;
 
 
 void initializeSerialMints();
@@ -21,6 +22,8 @@ void switchOn();
 void ledsOff();
 void ledsOn();
 void powerCycle();
+bool checkPing(unsigned long waitTimePing);
+bool elapsedTime(unsigned long startIn, unsigned long periodIn);
 // extern bool stringComplete;
 // extern String inputString;
 // void commandReadMints();
