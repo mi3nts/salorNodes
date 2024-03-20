@@ -28,11 +28,11 @@ uint16_t currentState  = LOW;
 
 
 // Have a couple of timers - 
-// Anyway reboot after 6 + 2 hours 
+
+// Anyway reboot after 6 hours 
 
 // Every hour check for pings from the arduino 
 
-// After 2 days - Auto reboot 
 
 // Timers Setup 
 
