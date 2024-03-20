@@ -1,12 +1,9 @@
-<mxfile host="app.diagrams.net" modified="2024-03-20T15:31:05.628Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" etag="odU87ko4Adrxl01WUUcP" version="24.0.7" type="github">
+<mxfile host="app.diagrams.net" modified="2024-03-20T15:38:33.585Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" etag="iL-q-KZ3UoHWRlAznLl6" version="24.0.7" type="github">
   <diagram name="Page-1" id="u1S4PErbVwd56OdXEwxA">
     <mxGraphModel dx="1562" dy="1401" grid="1" gridSize="1" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#FFFFFF" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="S9HndhGdQff12As7EXrL-125" value="" style="html=1;verticalLabelPosition=bottom;align=center;labelBackgroundColor=#ffffff;verticalAlign=top;strokeWidth=2;strokeColor=#0080F0;shadow=0;dashed=0;shape=mxgraph.ios7.icons.up;" parent="1" vertex="1">
-          <mxGeometry x="506" y="305" width="32" height="70.5" as="geometry" />
-        </mxCell>
         <mxCell id="S9HndhGdQff12As7EXrL-114" value="" style="fontColor=#0066CC;verticalAlign=top;verticalLabelPosition=bottom;labelPosition=center;align=center;html=1;outlineConnect=0;fillColor=#CCCCCC;strokeColor=#6881B3;gradientColor=none;gradientDirection=north;strokeWidth=2;shape=mxgraph.networks.usb_stick;rotation=-180;" parent="1" vertex="1">
           <mxGeometry x="545" y="295" width="30" height="57" as="geometry" />
         </mxCell>
@@ -98,7 +95,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="S9HndhGdQff12As7EXrL-77" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=5;" parent="1" target="S9HndhGdQff12As7EXrL-53" edge="1">
+        <mxCell id="S9HndhGdQff12As7EXrL-77" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=5;" parent="1" target="S9HndhGdQff12As7EXrL-53" edge="1" source="S9HndhGdQff12As7EXrL-125">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="527" y="337" as="sourcePoint" />
             <mxPoint x="525" y="177" as="targetPoint" />
@@ -227,7 +224,7 @@
             <mxPoint x="528" y="338" as="sourcePoint" />
             <mxPoint x="526" y="271" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="688" y="273" />
+              <mxPoint x="688" y="271" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -254,12 +251,12 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="S9HndhGdQff12As7EXrL-127" value="" style="endArrow=none;html=1;rounded=0;strokeWidth=5;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" edge="1">
+        <mxCell id="S9HndhGdQff12As7EXrL-127" value="" style="endArrow=none;html=1;rounded=0;strokeWidth=5;strokeColor=#d6b656;fillColor=#fff2cc;exitX=0.256;exitY=0.003;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" edge="1" source="S9HndhGdQff12As7EXrL-125">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="516" y="306" as="sourcePoint" />
             <mxPoint x="36" y="259" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="516" y="239" />
+              <mxPoint x="508" y="239" />
               <mxPoint x="434" y="239" />
               <mxPoint x="432" y="94" />
               <mxPoint x="14" y="96" />
@@ -314,24 +311,6 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ZUK9A-RVAxWh7xUPPvwy-7" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="503" y="275" as="sourcePoint" />
-            <mxPoint x="663" y="275" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="ZUK9A-RVAxWh7xUPPvwy-8" value="Label" style="edgeLabel;resizable=0;html=1;;align=center;verticalAlign=middle;" connectable="0" vertex="1" parent="ZUK9A-RVAxWh7xUPPvwy-7">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="ZUK9A-RVAxWh7xUPPvwy-9" value="Source" style="edgeLabel;resizable=0;html=1;;align=left;verticalAlign=bottom;" connectable="0" vertex="1" parent="ZUK9A-RVAxWh7xUPPvwy-7">
-          <mxGeometry x="-1" relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="ZUK9A-RVAxWh7xUPPvwy-10" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="558" y="300" as="sourcePoint" />
-            <mxPoint x="608" y="250" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
         <mxCell id="ZUK9A-RVAxWh7xUPPvwy-11" value="" style="endArrow=none;html=1;rounded=0;strokeWidth=5;strokeColor=#FF0000;" edge="1" parent="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="244" y="248" as="sourcePoint" />
@@ -358,6 +337,15 @@
         </mxCell>
         <mxCell id="ZUK9A-RVAxWh7xUPPvwy-16" value="RG15 - rain sensor" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="227" y="35" width="69" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ZUK9A-RVAxWh7xUPPvwy-18" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=5;" edge="1" parent="1" target="S9HndhGdQff12As7EXrL-125">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="527" y="337" as="sourcePoint" />
+            <mxPoint x="528" y="151" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="S9HndhGdQff12As7EXrL-125" value="" style="html=1;verticalLabelPosition=bottom;align=center;labelBackgroundColor=#ffffff;verticalAlign=top;strokeWidth=2;strokeColor=#0080F0;shadow=0;dashed=0;shape=mxgraph.ios7.icons.up;" parent="1" vertex="1">
+          <mxGeometry x="501" y="304" width="32" height="70.5" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
