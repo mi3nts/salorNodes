@@ -56,8 +56,8 @@ powerStatus currentPowerStatus;
 Adafruit_GPS pa1010d(&Wire);
 bool PA1010DOnline;
 
-// Every 5 + 0 to 1 hour reboot
-unsigned long resetTimeMillis =  36000000 + random(1000)*120;
+// Every 10 hours --> reboot
+unsigned long resetTimeMillis =  36000000;
 unsigned long startTimeMillis = millis();
 
 // Every 2 hours sending a confirmed data packet

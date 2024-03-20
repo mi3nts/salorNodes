@@ -36,10 +36,10 @@ uint16_t currentState  = LOW;
 
 // Timers Setup 
 
-unsigned long pingPeriod       =   3600000; // Hourly
-unsigned long rebootPeriod     =   21600000; // Every 6 hours
+unsigned long pingPeriod       =   3600000;
+unsigned long rebootPeriod     =   18000000 + random(1000)*60;
 
-unsigned long waitTimePing     =   1200000; // 20 minutes
+unsigned long waitTimePing     =   1200000;
 
 unsigned long pingTimeStartMillis = millis();
 unsigned long rebootTimeStartMillis = millis();
