@@ -3,7 +3,7 @@
 #include "devicesMints.h"
 #include <Arduino.h>
 
-bool debuggingState = false;
+bool debuggingState = true;
 
 uint16_t sensingPeriod = 2000;
 uint16_t initPeriod = 1500;
@@ -36,10 +36,10 @@ uint16_t currentState  = LOW;
 
 // Timers Setup 
 
-unsigned long pingPeriod       =   3600000; // Hourly
-unsigned long rebootPeriod     =   21600000; // Every 6 hours
+unsigned long pingPeriod       =   3600000; // It looks for a ping every hour
+unsigned long rebootPeriod     =   21600000; // It reboots what ever happends every 6 hours
 
-unsigned long waitTimePing     =   1200000; // 20 minutes
+unsigned long waitTimePing     =   1200000; // It listens to pings if not there for 20 minutes
 
 unsigned long pingTimeStartMillis = millis();
 unsigned long rebootTimeStartMillis = millis();
@@ -54,9 +54,9 @@ void setup() {
     Serial.println("DEBUGGING ON");
     Serial.println("-------------------------------------\n");
 
-    pingPeriod       =   100000;
-    rebootPeriod     =   300000;
-    waitTimePing     =   10000;
+    pingPeriod       =   10000; // It looks for a ping every 6 minutes
+    rebootPeriod     =   420000; // It reboots what ever happends every 7 minutes
+    waitTimePing     =   300000;  // Each chage of state is expected withing 60 seconds
 
   }
 
@@ -84,6 +84,7 @@ void setup() {
 void loop() {
     
     if (elapsedTime(pingTimeStartMillis,pingPeriod)){
+       Serial.println("Check Ping Function Activated");
        if (checkPing(waitTimePing)){
         Serial.println("Ping Heard - Salor Node Alive");
        }else{

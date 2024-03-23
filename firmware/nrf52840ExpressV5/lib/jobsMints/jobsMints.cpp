@@ -86,23 +86,34 @@ bool checkPing(unsigned long waitTimePing){
   Serial.print("Checking Ping! ");
   unsigned long beginTime = millis();
   unsigned long pulseTime = millis();
-  uint16_t previousState = LOW; // Variable to store the previous state of the pin
+  int previousState = LOW; // Variable to store the previous state of the pin
   uint32_t risingEdgeCount = 0; // Counter variable for rising edges
-
+  pulseTime = millis();
+ 
   while(millis() - beginTime <  waitTimePing)
   {
     int currentState = digitalRead(checkPin); // Read the current state of the pin
-    delay(10);
+    delay(20);
     if (currentState == HIGH && previousState == LOW) {
+
+      Serial.println();
       Serial.print("Rising edge detected! ");
-      Serial.println(risingEdgeCount);
-      pulseTime = millis();
+      Serial.println();
+
       if(millis() - pulseTime < 500){
         risingEdgeCount++; // Increment the rising edge counter
-        Serial.println("Pulse Detected ");
+        Serial.println();
+        Serial.print("Pulse Detected - Pulse Count: ");
+        Serial.println(risingEdgeCount); // Increment the rising edge counter
+      }else{
+        risingEdgeCount = 0; // Increment the rising edge counter
+        Serial.println();
+        Serial.println("New Pulse Detected ");
       }
+      pulseTime = millis();
+
     }
-    delay(10);
+
     previousState = currentState; 
   
     if (risingEdgeCount >= 5){
