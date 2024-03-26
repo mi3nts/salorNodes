@@ -3,7 +3,7 @@
 #include "devicesMints.h"
 #include <Arduino.h>
 
-bool debuggingState = true;
+bool debuggingState = false;
 
 uint16_t sensingPeriod = 2000;
 uint16_t initPeriod = 1500;
@@ -37,20 +37,20 @@ uint16_t currentState  = LOW;
 // Timers Setup 
 
 unsigned long pingPeriod       =   3600000; // It looks for a ping every hour
-unsigned long rebootPeriod     =   21600000; // It reboots what ever happends every 6 hours
+unsigned long rebootPeriod     =   28800000; // It reboots what ever happends every 8 hours
 
-unsigned long waitTimePing     =   1200000; // It listens to pings if not there for 20 minutes
+unsigned long waitTimePing     =   900000 ; // It listens to pings if not there for 15 minutes
 
 unsigned long pingTimeStartMillis = millis();
 unsigned long rebootTimeStartMillis = millis();
 
 void setup() {
 
-  delay(1000);
   initializeSerialMints();
+  delay(2000);
+
 
   if (debuggingState) {
-    delay(2000);
     Serial.println("DEBUGGING ON");
     Serial.println("-------------------------------------\n");
 
@@ -82,13 +82,14 @@ void setup() {
 }
 
 void loop() {
-    
+
+    Serial.println("Waiting for ping check time");
     if (elapsedTime(pingTimeStartMillis,pingPeriod)){
-       Serial.println("Check Ping Function Activated");
+       Serial.println("Check ping function activated");
        if (checkPing(waitTimePing)){
-        Serial.println("Ping Heard - Salor Node Alive");
+        Serial.println("Ping heard - Salor node alive");
        }else{
-        Serial.println("Ping Not Heard - Salor Node is dead - Power Cycling");
+        Serial.println("Ping not heard - Salor node is dead - Power cycling");
         powerCycle();
        }
        pingTimeStartMillis = millis();
@@ -99,5 +100,8 @@ void loop() {
         powerCycle();
         rebootTimeStartMillis = millis();
     }
+    
+    delay(10000);
+
 }
 
