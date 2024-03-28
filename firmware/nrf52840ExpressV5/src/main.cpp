@@ -54,9 +54,9 @@ void setup() {
     Serial.println("DEBUGGING ON");
     Serial.println("-------------------------------------\n");
 
-    pingPeriod       =   10000; // It looks for a ping every 6 minutes
+    pingPeriod       =   360000; // It looks for a ping every 6 minutes
     rebootPeriod     =   420000; // It reboots what ever happends every 7 minutes
-    waitTimePing     =   300000;  // Each chage of state is expected withing 60 seconds
+    waitTimePing     =   300000;  // Each chage of state is expected withing 5 minutes
 
   }
 

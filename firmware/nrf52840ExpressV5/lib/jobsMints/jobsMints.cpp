@@ -26,9 +26,11 @@ void delayMints(unsigned int timeSpent,unsigned int loopInterval){
 
 void switchOn(){
   Serial.println("Switch ON");
-  digitalWrite(setPin, LOW);
-  delay(10);
+  delay(15);
   digitalWrite(unSetPin, HIGH);
+  delay(15);
+  digitalWrite(unSetPin, LOW);
+  delay(15);
   //  pixels.setPixelColor(0, pixels.Color(0, 150, 0));
   //  pixels.show();
   //  delay(100);
@@ -40,10 +42,13 @@ void switchOn(){
 
 void switchOff(){
   Serial.println("Switch Off");
-  digitalWrite(unSetPin, LOW);
-  delay(10);
+  delay(15);
   digitalWrite(setPin, HIGH);
+  delay(15);
+  digitalWrite(setPin, LOW);
+  delay(15);
   
+
   //  pixels.setPixelColor(0, pixels.Color( 150,0, 0));
   //  pixels.show();
   //  delay(100);
@@ -79,6 +84,7 @@ void powerCycle(){
  switchOff();
  delay(5000);
  switchOn(); 
+ delay(5000);
  }
 
 
