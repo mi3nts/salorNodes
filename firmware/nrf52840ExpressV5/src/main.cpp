@@ -70,6 +70,7 @@ void setup() {
   
   delay(10);
   switchOn();
+  delay(10);
   pixels.begin();
   delay(10);
   pixels.clear(); // Set all pixel colors to 'off'

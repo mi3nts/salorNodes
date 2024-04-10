@@ -56,8 +56,8 @@ powerStatus currentPowerStatus;
 Adafruit_GPS pa1010d(&Wire);
 bool PA1010DOnline;
 
-// Every 10 hours --> reboot
-unsigned long resetTimeMillis =  36000000;
+// Every 24 hours --> reboot // Irrelavant if relay working as expected
+unsigned long resetTimeMillis =  86400000;
 unsigned long startTimeMillis = millis();
 
 // Every 2 hours sending a confirmed data packet
@@ -97,10 +97,19 @@ void setup() {
   Serial.println(resetTimeConfirmedMillis);
   Serial.println();
 
+  Serial.print("Setting HB pin to output");
+  Serial.println();
+  pinMode(hbPin, OUTPUT); 
+
+  Serial.print("Changing HB pin voltage to low");
+  Serial.println();
+  digitalWrite(hbPin, LOW);
+
   MLRPS001Online = initializeMLRPS001();
   if (MLRPS001Online){
      readMLRPS001(false);
   }
+  
 
   loraInitMints();
   resetLoRaMints(1);

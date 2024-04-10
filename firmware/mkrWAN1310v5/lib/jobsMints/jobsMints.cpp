@@ -178,14 +178,17 @@ void sendHBPulse(uint8_t hbPin,  unsigned long HighLowPeriodHB, unsigned long ma
       }
 
       if (hbPinState){
-      digitalWrite(hbPin,LOW);
-      hbPinState = 0;
-      }else{
-      digitalWrite(hbPin,HIGH);
-      hbPinState = 1;
+        digitalWrite(hbPin,LOW);
+        hbPinState = 0;
+        }else{
+        digitalWrite(hbPin,HIGH);
+        hbPinState = 1;
       }
       delay(HighLowPeriodHB);
       }
+
+      digitalWrite(hbPin,LOW);
+      hbPinState = 0;
       Serial.println("Pulse Sent");
       return;
 }
