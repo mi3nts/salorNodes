@@ -20,8 +20,8 @@ uint16_t setPin   = D4;
 uint16_t bootAfter = 5;  
 
 // Timer Setup 
-unsigned long pingPeriod       =   3600000; // It looks for a ping every hour
-unsigned long waitTimePing     =   900000 ; // It listens to pings if not there for 15 minutes
+unsigned long long pingPeriod       =   3600000; // It looks for a ping every hour
+unsigned long long waitTimePing     =   900000 ; // It listens to pings if not there for 15 minutes
 
 void setup(){
   initializeSerialMints();
@@ -43,11 +43,10 @@ void setup(){
     Serial.println("DEBUGGING ON T1");
     pingPeriod         =   3600000 ;  // It looks for a ping half an hour
     waitTimePing       =    900000 ;  // Each chage of state is expected withing 15 minutes at most
-    bootAfter          =         8 ;  
   }
 
   //Increment boot number and print it every reboot
-  ++bootCount;
+
   Serial.println("Boot number: " + String(bootCount));
   Serial.println();
 
@@ -59,15 +58,17 @@ void setup(){
 
 switch (bootCount) 
   {
-  case 1:
+  case 0:
     Serial.print("Initial Boot - Letting it run for ");
     Serial.print(pingPeriod);
     Serial.print(" Micro Seconds");
     break;
 
-  case 8:
-    Serial.print("Forced Power Cycling");
-    bootCount = 0;
+  case 3:
+    delay(1000);
+    Serial.println("Forced Power Cycling");
+    delay(1000);
+    bootCount = 0 ;
     delay(1000);
     powerCycle();
     break;
@@ -84,6 +85,8 @@ switch (bootCount)
     Serial.println();
     delay(1000);
     Serial.println("Going to sleep now");
+    delay(1000);
+    ++bootCount;
     delay(1000);
     Serial.flush(); 
     esp_deep_sleep_start();
