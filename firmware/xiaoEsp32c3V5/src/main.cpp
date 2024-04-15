@@ -3,12 +3,9 @@
 #include "devicesMints.h"
 
 
-#define mS_TO_S_FACTOR 1000  /* Conversion factor for micro seconds to seconds */
-// #define TIME_TO_SLEEP  5        /* Time ESP32 will go to sleep (in seconds) */
-
 RTC_DATA_ATTR int bootCount = 0;
 
-bool debuggingState = false;
+bool debuggingState = true;
 
 uint16_t sensingPeriod = 2000;
 uint16_t initPeriod = 1500;
@@ -20,16 +17,11 @@ uint16_t checkPin = D0;
 uint16_t unSetPin = D2;  
 uint16_t setPin   = D4;  
 
+uint16_t bootAfter = 5;  
 
-
-// Timers Setup 
-
+// Timer Setup 
 unsigned long pingPeriod       =   3600000; // It looks for a ping every hour
 unsigned long waitTimePing     =   900000 ; // It listens to pings if not there for 15 minutes
-
-unsigned long pingTimeStartMillis = millis();
-unsigned long rebootTimeStartMillis = millis();
-
 
 void setup(){
   initializeSerialMints();
@@ -48,35 +40,46 @@ void setup(){
   Serial.println();
 
   if (debuggingState) {
-    Serial.println("DEBUGGING ON");
-    pingPeriod       =   60000;  // It looks for a ping every minute
-    waitTimePing     =   30000;  // Each chage of state is expected withing 30 seconds
+    Serial.println("DEBUGGING ON T1");
+    pingPeriod         =   3600000 ;  // It looks for a ping half an hour
+    waitTimePing       =    900000 ;  // Each chage of state is expected withing 15 minutes at most
+    bootAfter          =         8 ;  
   }
+
   //Increment boot number and print it every reboot
   ++bootCount;
   Serial.println("Boot number: " + String(bootCount));
+  Serial.println();
 
   //Print the wakeup reason for ESP32
   print_wakeup_reason();
-  esp_sleep_enable_timer_wakeup(pingPeriod * mS_TO_S_FACTOR); // This is in Micro Seconds 
+  delay(1000);
+  esp_sleep_enable_timer_wakeup(1000ULL * pingPeriod); // This is in Micro Seconds //This is just defining the timer
+  delay(1000);
 
-  if (bootCount == 1) 
+switch (bootCount) 
   {
-  Serial.print("Initial Boot - Letting it run for ");
-  Serial.print(pingPeriod);
-  Serial.print(" Micro Seconds");
-  
-  } else if (bootCount <= 7){
-    if (checkPing(waitTimePing)){
-      Serial.println("Ping heard - Salor node alive");
-    }else{
-      Serial.println("Ping not heard - Salor node is dead - Power cycling");
-      powerCycle();
-    }
-  } else {
+  case 1:
+    Serial.print("Initial Boot - Letting it run for ");
+    Serial.print(pingPeriod);
+    Serial.print(" Micro Seconds");
+    break;
+
+  case 8:
+    Serial.print("Forced Power Cycling");
     bootCount = 0;
     delay(1000);
     powerCycle();
+    break;
+
+  default:
+    if (checkPing(waitTimePing)) {
+      Serial.println("Ping heard - Salor node alive");
+    } else {
+      Serial.println("Ping not heard - Salor node is dead - Power cycling");
+      powerCycle();
+    }
+    break;
   }
     Serial.println();
     delay(1000);
@@ -88,9 +91,7 @@ void setup(){
 }
 
 
-
 void loop() {
-    // powerCycle();
-    //     delay(10000);
+
 }
 

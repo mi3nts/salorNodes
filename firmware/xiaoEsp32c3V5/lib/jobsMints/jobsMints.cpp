@@ -41,61 +41,31 @@ void delayMints(unsigned int timeSpent,unsigned int loopInterval){
 
 }
 
-void switchOn(){
-  Serial.println("Switch ON");
-  // digitalWrite(setPin, LOW);
-  delay(15);
-  digitalWrite(unSetPin, HIGH);
-  delay(15);
-  digitalWrite(unSetPin, LOW);
-  delay(15);
-
-  //  pixels.setPixelColor(0, pixels.Color(0, 150, 0));
-  //  pixels.show();
-  //  delay(100);
-  //  pixels.clear();
-  //  pixels.show();
-     
-}
 
 
 void switchOff(){
   Serial.println("Switch Off");
-  // digitalWrite(unSetPin, LOW);
-  delay(15);
+  
+  delay(10);
+  digitalWrite(unSetPin, LOW);
+  delay(10);
   digitalWrite(setPin, HIGH);
-  delay(15);
+  delay(10);
   digitalWrite(setPin, LOW);
-  delay(15);
-
-  //  pixels.setPixelColor(0, pixels.Color( 150,0, 0));
-  //  pixels.show();
-  //  delay(100);
-  //  pixels.clear();
-  //  pixels.show();
+  delay(10);
 }
 
-
-// void ledsOn(){
-//     Serial.println("LEDS ON");
-//     Serial.println("-------------------------------------\n");
-//     digitalWrite(blueLedPin, HIGH);   
-//     delay(2500); 
-//     digitalWrite(redLedPin, HIGH);    
-//     delay(2500);
-// }
-
-
-
-// void ledsOff(){
-//     Serial.println("LEDS OFF");
-//     Serial.println("-------------------------------------\n");
-//     digitalWrite(blueLedPin, LOW);   
-//     delay(2500); 
-//     digitalWrite(redLedPin, LOW);    
-//     delay(2500);    
-
-// }
+void switchOn(){
+  Serial.println("Switch ON");
+  delay(10);
+  digitalWrite(setPin, LOW);
+  delay(10);
+  digitalWrite(unSetPin, HIGH);
+  delay(10);
+  digitalWrite(unSetPin, LOW);
+  delay(10);
+     
+}
 
 
 
