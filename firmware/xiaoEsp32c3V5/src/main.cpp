@@ -7,9 +7,6 @@ RTC_DATA_ATTR int bootCount = 0;
 
 bool debuggingState = true;
 
-uint16_t sensingPeriod = 2000;
-uint16_t initPeriod = 1500;
-
 unsigned long startTime;
 
 
@@ -21,7 +18,7 @@ uint16_t bootAfter = 5;
 
 // Timer Setup 
 unsigned long long pingPeriod       =   3600000; // It looks for a ping every hour
-unsigned long long waitTimePing     =   900000 ; // It listens to pings if not there for 15 minutes
+unsigned long long waitTimePing     =    900000 ; // It listens to pings if not there for 15 minutes
 
 void setup(){
   initializeSerialMints();
@@ -34,7 +31,7 @@ void setup(){
   pinMode(checkPin, INPUT); //
   delay(15);
 
-  delay(10000);
+  delay(5000);
   switchOn();
 
   Serial.println();
@@ -68,7 +65,7 @@ switch (bootCount)
     delay(1000);
     Serial.println("Forced Power Cycling");
     delay(1000);
-    bootCount = 0 ;
+    bootCount = 1 ;
     delay(1000);
     powerCycle();
     break;
@@ -88,13 +85,16 @@ switch (bootCount)
     delay(1000);
     ++bootCount;
     delay(1000);
-    Serial.flush(); 
+    if(Serial)
+    {
+      Serial.flush();
+    }
     esp_deep_sleep_start();
     Serial.println("This will never be printed");
+
 }
 
 
 void loop() {
 
 }
-

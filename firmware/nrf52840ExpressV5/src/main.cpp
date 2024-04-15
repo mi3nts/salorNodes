@@ -45,32 +45,42 @@ unsigned long pingTimeStartMillis = millis();
 unsigned long rebootTimeStartMillis = millis();
 
 void setup() {
-
+  delay(2000);
   initializeSerialMints();
   delay(2000);
+
+  Serial.println("MINTS Salor Nodes");
+  Serial.println("-------------------------------------");
+
+
+  Serial.println("MINTS Power Cycler");
+  Serial.println("-------------------------------------");
+  pinMode(redLedPin, OUTPUT); 
+  pinMode(blueLedPin, OUTPUT); 
+  pinMode(setPin, OUTPUT); 
+  pinMode(unSetPin, OUTPUT); 
+
+  digitalWrite(unSetPin, LOW);
+  digitalWrite(setPin, LOW);
+  
+  pinMode(checkPin, INPUT); //
 
 
   if (debuggingState) {
     Serial.println("DEBUGGING ON");
-    Serial.println("-------------------------------------\n");
+    Serial.println("-------------------------------------");
 
     pingPeriod       =   360000; // It looks for a ping every 6 minutes
     rebootPeriod     =   420000; // It reboots what ever happends every 7 minutes
     waitTimePing     =   300000;  // Each chage of state is expected withing 5 minutes
 
+    delay(10);
+    powerCycle();
+
   }
 
-  Serial.println("MINTS Power Cycler");
-  Serial.println("-------------------------------------\n");
-  pinMode(redLedPin, OUTPUT); 
-  pinMode(blueLedPin, OUTPUT); 
-  pinMode(setPin, OUTPUT); 
-  pinMode(unSetPin, OUTPUT); 
-  pinMode(checkPin, INPUT); //
-  
   delay(10);
   switchOn();
-  delay(10);
   pixels.begin();
   delay(10);
   pixels.clear(); // Set all pixel colors to 'off'
@@ -79,7 +89,6 @@ void setup() {
   delay(10);
   ledsOff();
   delay(10);
-
 }
 
 void loop() {

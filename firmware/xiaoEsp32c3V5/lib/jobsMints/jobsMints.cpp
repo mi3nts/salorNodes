@@ -46,24 +46,24 @@ void delayMints(unsigned int timeSpent,unsigned int loopInterval){
 void switchOff(){
   Serial.println("Switch Off");
   
-  delay(10);
+  delay(100);
   digitalWrite(unSetPin, LOW);
-  delay(10);
+  delay(100);
   digitalWrite(setPin, HIGH);
-  delay(10);
+  delay(100);
   digitalWrite(setPin, LOW);
-  delay(10);
+  delay(100);
 }
 
 void switchOn(){
   Serial.println("Switch ON");
-  delay(10);
+  delay(100);
   digitalWrite(setPin, LOW);
-  delay(10);
+  delay(100);
   digitalWrite(unSetPin, HIGH);
-  delay(10);
+  delay(100);
   digitalWrite(unSetPin, LOW);
-  delay(10);
+  delay(100);
      
 }
 
