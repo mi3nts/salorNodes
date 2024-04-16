@@ -5,7 +5,7 @@
 
 RTC_DATA_ATTR int bootCount = 0;
 
-bool debuggingState = true;
+bool debuggingState = false;
 
 unsigned long startTime;
 
@@ -61,7 +61,7 @@ switch (bootCount)
     Serial.print(" Micro Seconds");
     break;
 
-  case 3:
+  case 8:
     delay(1000);
     Serial.println("Forced Power Cycling");
     delay(1000);

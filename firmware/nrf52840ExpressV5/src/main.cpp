@@ -48,7 +48,6 @@ void setup() {
   delay(2000);
   initializeSerialMints();
   delay(2000);
-
   Serial.println("MINTS Salor Nodes");
   Serial.println("-------------------------------------");
 
